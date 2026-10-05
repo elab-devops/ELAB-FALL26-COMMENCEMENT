@@ -25,6 +25,13 @@ order by registered_at;
 
 Export the results as CSV. Keep `elab_private` out of the Data API's exposed schemas. Each normalized email is stored once, and repeat submissions do not change the original registration.
 
+## Confirmation emails
+
+Optional Gmail confirmations with a Google Calendar button and calendar attachment
+are prepared in [EMAIL_SETUP.md](EMAIL_SETUP.md). They require deploying the
+Supabase Edge Function and running the queue and schedule SQL; pushing website
+files alone does not activate emails.
+
 ## Calendar and event details
 
 Event times are defined in `site-config.js`. The current end time is provisionally 23:00 Berlin time. Generate the downloadable calendar after changing those details:
@@ -33,4 +40,4 @@ Event times are defined in `site-config.js`. The current end time is provisional
 node scripts/generate-calendar.js
 ```
 
-Google opens a prefilled calendar event. Apple/iCloud and Outlook import `event.ics`. These are calendar copies: deleting one is not an RSVP cancellation, and later location changes do not automatically update imported copies. Send location updates to the collected guest emails. No email confirmation, email verification, or self-service cancellation is included in this minimal backend.
+Google opens a prefilled calendar event. Apple/iCloud and Outlook import `event.ics`. These are calendar copies: deleting one is not an RSVP cancellation, and later location changes do not automatically update imported copies. Send location updates to the collected guest emails. Email confirmations require the separate setup above. Email verification and self-service cancellation are not included.

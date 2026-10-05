@@ -1,0 +1,3 @@
+[functions.send-rsvp-confirmation]
+# The handler checks a private worker token. Public callers cannot send mail.
+verify_jwt = false
