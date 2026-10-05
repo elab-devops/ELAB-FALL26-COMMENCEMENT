@@ -39,7 +39,7 @@ h1{font-size:clamp(2.6rem,9vw,7.5rem);max-width:14ch}
 
 /* 4. batch */
 h2{font-size:clamp(2.2rem,6.5vw,5rem)}
-.sub{font-size:1.05rem;color:var(--soft);margin-top:1.2rem}
+.sub{font-size:1.05rem;color:#666;margin-top:1.2rem}
 .grid{list-style:none;display:grid;grid-auto-flow:column;grid-template-rows:minmax(0,auto);grid-auto-columns:calc((100vw - 16vw - .8rem)/2);gap:1.75rem .8rem;margin:9vh -8vw 0;padding:0 8vw;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:8vw;scrollbar-width:none;overscroll-behavior-x:contain}
 .grid::-webkit-scrollbar{display:none}
 .grid>li{scroll-snap-align:start}
@@ -59,7 +59,7 @@ a.frame{color:inherit;text-decoration:none;cursor:pointer}
 .ov{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;justify-content:flex-start;padding:.8rem;overflow-y:auto;opacity:0;transition:opacity 300ms ease}
 .frame:hover .ov,.frame:focus-visible .ov,.frame:focus .ov{opacity:1}
 .ov b,.under b{display:block;font-weight:300;font-size:.95rem;line-height:1.3}
-.ov i,.under i{display:block;font-style:normal;font-weight:200;font-size:.8rem;line-height:1.45;color:var(--soft)}
+.ov i,.under i{display:block;font-style:normal;font-weight:200;font-size:.8rem;line-height:1.45;color:#666}
 .under{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media(hover:none){
   .ov{display:none}
