@@ -25,7 +25,7 @@ for Apple Calendar and Outlook. No guest login is required.
    worker every minute. Public website code and its keys stay unchanged.
 5. Submit a new RSVP using an email you own. Within roughly a minute, check
    the inbox and spam folder and open the calendar attachment. Confirm it
-   starts October 17 at 19:00 Berlin time. Gmail acceptance is not proof of inbox delivery.
+   starts October 17 at 19:00 Munich time. Gmail acceptance is not proof of inbox delivery.
 
 Existing registrations are not emailed automatically. To test using Anna's
 already registered personal address, explicitly queue only that registration:

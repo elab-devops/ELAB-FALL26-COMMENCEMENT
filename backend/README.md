@@ -34,7 +34,7 @@ files alone does not activate emails.
 
 ## Calendar and event details
 
-Event times are defined in `site-config.js`. The current end time is provisionally 23:00 Berlin time. Generate the downloadable calendar after changing those details:
+Event times are defined in `site-config.js`. The event ends at midnight (24:00 on October 17, stored as 00:00 on October 18) Munich time. Generate the downloadable calendar after changing those details:
 
 ```sh
 node scripts/generate-calendar.js

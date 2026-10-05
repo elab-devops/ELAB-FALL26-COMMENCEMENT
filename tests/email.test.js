@@ -16,6 +16,8 @@ test('email escapes guest names and includes the same calendar as the website', 
   assert.ok(!message.html.includes('<img src=x>'));
   assert.ok(message.html.includes('Alex &amp; Sam'));
   assert.ok(message.text.includes('19:00'));
+  assert.ok(message.text.includes('Munich time'));
+  assert.ok(!message.text.includes('Berlin time'));
   assert.equal(message.to.address, guest.email);
   assert.equal(message.from.address, 'anna.papanakli@tum-ai.com');
   assert.equal(message.attachments[0].content, fs.readFileSync('event.ics', 'utf8'));
