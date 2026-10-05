@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ELAB Fall 2026 · Commencement Party</title>
+<title>ELAB Commencement Evening</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#000;--bg:#fff;--soft:#8a8a8a;--line:#e6e6e6}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -19,7 +19,12 @@ a{color:inherit}
 /* 1. opening */
 .open{align-items:center;position:relative;padding:0}
 .logo{width:clamp(130px,16vw,180px);height:auto;display:block;animation:fade 800ms ease-out both}
-.logo-wrap{position:relative;display:flex;justify-content:center}
+.logo-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.countdown{display:flex;align-items:flex-start;gap:.85rem;color:#666;font-variant-numeric:tabular-nums;text-align:center}
+.countdown-unit{display:flex;flex-direction:column;gap:.4rem}
+.countdown-unit b{font-size:1.25rem;font-weight:300;line-height:1}
+.countdown-unit span{font-size:.55rem;letter-spacing:.15em}
+.countdown-divider{font-size:1rem;font-weight:200;line-height:1}
 .cue{position:absolute;top:calc(100% + 28px);left:50%;transform:translateX(-50%);width:12px;height:22px;animation:fade 800ms ease-out 400ms both}
 .cue svg{position:absolute;left:0;width:12px;height:6px;overflow:visible;opacity:0;animation:breathe 2s ease-in-out infinite}
 .cue svg:nth-child(1){top:0}
@@ -67,6 +72,31 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 }
 
 /* 5. closer */
+[hidden]{display:none!important}
+.rsvp-panel{width:100%;max-width:420px}
+.rsvp-panel h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:2rem}
+.rsvp-form{display:flex;flex-direction:column;text-align:left;gap:.6rem}
+.rsvp-form label{font-size:.8rem;color:#555}
+.optional{color:#777;font-size:.7rem}
+.rsvp-form input:not([type="radio"]){width:100%;min-height:48px;border:0;border-bottom:1px solid #bbb;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#000;padding:.65rem 0;margin-bottom:.6rem}
+.bringing-choice{border:0;padding:0;margin:.8rem 0}
+.bringing-choice legend{font-size:.8rem;color:#555;margin-bottom:.75rem}
+.yn-options{display:flex;align-items:center;gap:.6rem}
+.rsvp-form .yn-choice{position:relative;cursor:pointer}
+.yn-choice input{position:absolute;width:1px;height:1px;opacity:0}
+.yn-choice span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid transparent;border-radius:50%;font-size:.95rem;font-weight:300;color:#000}
+.yn-choice input:checked+span{border-color:#000;font-weight:600}
+.yn-choice input:focus-visible+span{outline:1px solid #000;outline-offset:3px}
+.yn-divider{font-size:.85rem;font-weight:200;color:#777}
+.companion-fields{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.5rem}
+.rsvp-form .rsvp-note{font-size:.75rem;line-height:1.5;color:#666;margin:.1rem 0 .6rem}
+.rsvp-form button{min-height:48px;border:1px solid #000;border-radius:0;background:#000;color:#fff;font:inherit;font-size:.9rem;cursor:pointer;padding:.75rem 1rem}
+.rsvp-form button:disabled{opacity:.55;cursor:wait}
+.rsvp-panel .rsvp-status{font-size:.85rem;color:#555;margin-top:1rem}
+.rsvp-panel h3{font-size:1.6rem;font-weight:300;letter-spacing:-.02em}
+.rsvp-panel .confirmation-subtitle{font-size:.95rem;color:#666;margin-top:.8rem}
+.rsvp-panel .calendar-label{font-size:.75rem;color:#666;margin-top:2rem}
+.calendar-links{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem 1.5rem;margin-top:1rem;font-size:.85rem}
 .batch{min-height:0;padding-bottom:6vh}
 .closer{min-height:0;padding:6vh 8vw 24vh;align-items:center;text-align:center}
 .closer p{font-size:1.25rem}
@@ -92,6 +122,8 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   .cue svg{opacity:1}
 }
 </style>
+<script src="./site-config.js" defer></script>
+<script src="./party.js" defer></script>
 </head>
 <body>
 
@@ -101,7 +133,12 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 
 <section class="open" aria-label="ELAB Fall 2026">
   <div class="logo-wrap">
-    <!-- REPLACE: paste your logo SVG here (keep class="logo") -->
+    <div class="countdown" role="timer" aria-label="Time until 17 October 2026 at 19:00 Berlin time">
+      <div class="countdown-unit"><b data-countdown>--</b><span>DD</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>HH</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>MM</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>SS</span></div>
+    </div>
     <svg class="logo" viewBox="0 0 170 40" role="img" aria-label="ELAB FALL 2026">
       <text x="85" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-weight="300" font-size="16" letter-spacing="3" fill="#000">ELAB FALL 2026</text>
     </svg>
@@ -116,7 +153,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   <h1 class="reveal" id="greeting">You’re invited.</h1>
   <div class="details">
     <div class="reveal"><div class="label">When</div><p>Saturday, 17 October 2026, 19:00</p></div>
-    <div class="reveal"><div class="label">What</div><p>Commencement Party, ELAB Fall Batch 2026</p></div>
+    <div class="reveal"><div class="label">What</div><p>ELAB Commencement Evening</p></div>
     <div class="reveal"><div class="label">Where</div><p>Munich.</p><p class="secret">The rest is ours to know and yours to find out.</p></div>
   </div>
   <p class="rsvp reveal"><a class="rsvp-down" href="#rsvp">RSVP</a></p>
@@ -130,7 +167,43 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 </section>
 
 <section class="closer" id="rsvp">
-  <p class="reveal">See you there. <a class="rsvp-link" href="#">RSVP</a></p>
+  <div class="rsvp-panel reveal">
+    <h2>Join us.</h2>
+    <form id="rsvp-form" class="rsvp-form">
+      <label for="guest-name">Name</label>
+      <input id="guest-name" name="guestName" type="text" autocomplete="name" maxlength="100" required>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required>
+      <fieldset class="bringing-choice">
+        <legend>I'm bringing someone</legend>
+        <div class="yn-options">
+          <label class="yn-choice"><input type="radio" name="bringingSomeone" value="y" aria-label="Yes"><span>y</span></label>
+          <span class="yn-divider" aria-hidden="true">/</span>
+          <label class="yn-choice"><input type="radio" name="bringingSomeone" value="n" aria-label="No" checked><span>n</span></label>
+        </div>
+      </fieldset>
+      <div id="companion-fields" class="companion-fields" hidden>
+        <label for="companion-name">Their name</label>
+        <input id="companion-name" name="companionName" type="text" autocomplete="off" maxlength="100" disabled>
+        <label for="companion-email">Their email <span class="optional">(optional)</span></label>
+        <input id="companion-email" name="companionEmail" type="email" autocomplete="off" inputmode="email" maxlength="254" disabled>
+      </div>
+      <p class="rsvp-note">We’ll use the email addresses for updates about the evening.</p>
+      <button id="rsvp-submit" type="submit">Count me in</button>
+    </form>
+    <p id="rsvp-status" class="rsvp-status" role="status"></p>
+    <div id="rsvp-confirmation" hidden>
+      <h3 id="rsvp-confirmed-title" tabindex="-1">You’re on the list.</h3>
+      <p class="confirmation-subtitle">Location coming soon, see you there.</p>
+      <p class="calendar-label">Save the evening to your calendar</p>
+      <div class="calendar-links">
+        <a id="calendar-google" href="#" target="_blank" rel="noopener noreferrer">Google</a>
+        <a id="calendar-apple" href="./event.ics">iCloud / Apple</a>
+        <a id="calendar-outlook" href="./event.ics" download="ELAB-Commencement-Evening.ics">Outlook</a>
+      </div>
+    </div>
+    <noscript><p>Please enable JavaScript to RSVP.</p></noscript>
+  </div>
 </section>
 
 <script>
@@ -194,12 +267,6 @@ var PHOTOS=[
     grid.appendChild(li);
   });
 
-  /* RSVP: opens a prefilled reply email (no backend, the reply carries their address) */
-  var RSVP_EMAIL='rsvp@example.com'; /* TODO: your address */
-  var rsvpBody='Hi, I\u2019ll be there.\n\n'+(name?'\u2014 '+name:'Name:\n');
-  var rsvpHref='mailto:'+RSVP_EMAIL+'?subject='+encodeURIComponent('RSVP: ELAB Fall 2026'+(name?' \u2013 '+name:''))+'&body='+encodeURIComponent(rsvpBody);
-  document.querySelectorAll('.rsvp-link').forEach(function(a){a.href=rsvpHref});
-
   /* page counter */
   var pcount=document.getElementById('pcount'),prev=document.getElementById('prev'),next=document.getElementById('next');
   var pad=function(n){return('0'+n).slice(-2)},mq=matchMedia('(min-width:700px)'),rm=matchMedia('(prefers-reduced-motion: reduce)');
@@ -217,9 +284,9 @@ var PHOTOS=[
   grid.addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
   if(FADE_FROM!==null)document.getElementById('pager').style.display='none'; /* a count would give the teaser away */
 
-  /* RSVP in the invitation frame: scroll to the bottom of the page (the closing RSVP opens the email) */
+  /* RSVP in the invitation frame: scroll to the registration form. */
   document.querySelectorAll('.rsvp-down').forEach(function(a){
-    a.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:document.documentElement.scrollHeight,behavior:beh()})});
+    a.addEventListener('click',function(e){e.preventDefault();document.getElementById('rsvp').scrollIntoView({behavior:beh(),block:'center'})});
   });
 
   /* mouse drag-to-swipe (touch and trackpad swipe natively) */
