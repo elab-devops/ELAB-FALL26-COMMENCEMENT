@@ -75,22 +75,27 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 [hidden]{display:none!important}
 .rsvp-panel{width:100%;max-width:420px}
 .rsvp-panel h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:2rem}
-.rsvp-form{display:flex;flex-direction:column;text-align:left;gap:.6rem}
+.rsvp-form{display:flex;flex-direction:column;text-align:left;gap:1rem}
+.field-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .rsvp-form label{font-size:.8rem;color:#555}
 .optional{color:#777;font-size:.7rem}
-.rsvp-form input:not([type="radio"]){width:100%;min-height:48px;border:0;border-bottom:1px solid #bbb;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#000;padding:.65rem 0;margin-bottom:.6rem}
+.rsvp-form input:not([type="radio"]){width:100%;min-height:44px;border:0;border-bottom:1px solid #ccc;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#222;padding:.65rem 0;transition:border-color 180ms ease}
+.rsvp-form input::placeholder{color:#999;opacity:1;font-weight:300}
+.rsvp-form input:focus::placeholder{opacity:0}
+.rsvp-form input:not([type="radio"]):focus{outline:none;border-bottom-color:#777}
 .bringing-choice{border:0;padding:0;margin:.8rem 0}
-.bringing-choice legend{font-size:.8rem;color:#555;margin-bottom:.75rem}
+.bringing-choice legend{font-size:.8rem;color:#777;margin-bottom:.25rem}
 .yn-options{display:flex;align-items:center;gap:.6rem}
-.rsvp-form .yn-choice{position:relative;cursor:pointer}
+.rsvp-form .yn-choice{position:relative;cursor:pointer;padding:6px 8px}
 .yn-choice input{position:absolute;width:1px;height:1px;opacity:0}
-.yn-choice span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-bottom:1px solid transparent;font-size:.95rem;font-weight:300;color:#000}
+.yn-choice span{display:flex;align-items:center;justify-content:center;width:24px;height:32px;border-bottom:1px solid transparent;font-size:.95rem;font-weight:300;color:#555}
 .yn-choice input:checked+span{border-bottom-color:#aaa}
 .yn-choice input:focus-visible+span{outline:1px solid #000;outline-offset:3px}
 .yn-divider{font-size:.85rem;font-weight:200;color:#777}
-.companion-fields{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.5rem}
+.companion-fields{display:flex;flex-direction:column;gap:1rem;margin-bottom:.5rem}
 .rsvp-form .rsvp-note{font-size:.75rem;line-height:1.5;color:#666;margin:.1rem 0 .6rem}
-.rsvp-form button{min-height:48px;border:1px solid #000;border-radius:0;background:#000;color:#fff;font:inherit;font-size:.9rem;cursor:pointer;padding:.75rem 1rem}
+.rsvp-form button{min-height:44px;border:1px solid #bbb;border-radius:0;background:transparent;color:#333;font:inherit;font-size:.85rem;cursor:pointer;padding:.5rem 1rem;transition:border-color 180ms ease,background 180ms ease}
+.rsvp-form button:hover{border-color:#777;background:#fafafa}
 .rsvp-form button:disabled{opacity:.55;cursor:wait}
 .rsvp-panel .rsvp-status{font-size:.85rem;color:#555;margin-top:1rem}
 .rsvp-panel h3{font-size:1.6rem;font-weight:300;letter-spacing:-.02em}
@@ -170,10 +175,10 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   <div class="rsvp-panel reveal">
     <h2>Join us.</h2>
     <form id="rsvp-form" class="rsvp-form">
-      <label for="guest-name">Name</label>
-      <input id="guest-name" name="guestName" type="text" autocomplete="name" maxlength="100" required>
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required>
+      <label class="field-label" for="guest-name">Name</label>
+      <input id="guest-name" name="guestName" type="text" placeholder="Name" autocomplete="name" maxlength="100" required>
+      <label class="field-label" for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" inputmode="email" maxlength="254" required>
       <fieldset class="bringing-choice">
         <legend>I'm bringing someone</legend>
         <div class="yn-options">
@@ -183,10 +188,10 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
         </div>
       </fieldset>
       <div id="companion-fields" class="companion-fields" hidden>
-        <label for="companion-name">Their name(s)</label>
-        <input id="companion-name" name="companionName" type="text" autocomplete="off" maxlength="100" disabled>
-        <label for="companion-email">Their email <span class="optional">(optional)</span></label>
-        <input id="companion-email" name="companionEmail" type="email" autocomplete="off" inputmode="email" maxlength="254" disabled>
+        <label class="field-label" for="companion-name">Their name(s)</label>
+        <input id="companion-name" name="companionName" type="text" placeholder="Their name(s)" autocomplete="off" maxlength="100" disabled>
+        <label class="field-label" for="companion-email">Their email (optional)</label>
+        <input id="companion-email" name="companionEmail" type="email" placeholder="Their email (optional)" autocomplete="off" inputmode="email" maxlength="254" disabled>
       </div>
       <p class="rsvp-note">We’ll use the email addresses for updates about the evening.</p>
       <button id="rsvp-submit" type="submit">Count me in</button>
