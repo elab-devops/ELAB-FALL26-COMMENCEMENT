@@ -74,3 +74,12 @@ test('missing configuration, invalid transport, and backend failure never count 
   await assert.rejects(register({ supabaseUrl: 'https://project.supabase.co', supabasePublishableKey: 'key' }, details,
     async () => { throw new Error('Network unavailable'); }), /Network unavailable/);
 });
+
+test('multiple companion emails are normalized and deduplicated', async () => {
+  let saved;
+  await register({ supabaseUrl: 'https://project.supabase.co', supabasePublishableKey: 'key' },
+    { email: 'guest@example.com', name: 'Anna', bringingSomeone: true,
+      companionName: 'Alex, Sam', companionEmail: ' Alex@Example.com, sam@example.com, ALEX@example.com ' },
+    async (_, options) => { saved = JSON.parse(options.body); return { ok: true }; });
+  assert.equal(saved.companion_email, 'alex@example.com, sam@example.com');
+});

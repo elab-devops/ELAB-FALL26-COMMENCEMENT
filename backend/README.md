@@ -32,6 +32,15 @@ are prepared in [EMAIL_SETUP.md](EMAIL_SETUP.md). They require deploying the
 Supabase Edge Function and running the queue and schedule SQL; pushing website
 files alone does not activate emails.
 
+## Multiple companion emails
+
+The companion email field accepts comma-separated addresses, normalizes their
+case, and removes duplicates. For an existing database, run
+`backend/multiple-companion-emails.sql` once in SQL Editor. New databases use
+the updated `backend/setup.sql`. Each address is validated individually;
+the combined field has a 2,000-character limit. Confirmation emails still go
+to the registering guest only. Repeat submissions keep the original RSVP.
+
 ## Calendar and event details
 
 Event times are defined in `site-config.js`. The event ends at midnight (24:00 on October 17, stored as 00:00 on October 18) Munich time. Generate the downloadable calendar after changing those details:

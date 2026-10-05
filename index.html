@@ -190,8 +190,9 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
       <div id="companion-fields" class="companion-fields" hidden>
         <label class="field-label" for="companion-name">Their name(s)</label>
         <input id="companion-name" name="companionName" type="text" placeholder="Their name(s)" autocomplete="off" maxlength="100" disabled>
-        <label class="field-label" for="companion-email">Their email (optional)</label>
-        <input id="companion-email" name="companionEmail" type="email" placeholder="Their email (optional)" autocomplete="off" inputmode="email" maxlength="254" disabled>
+        <label class="field-label" for="companion-email">Their email(s) (optional)</label>
+        <input id="companion-email" name="companionEmail" type="email" multiple placeholder="Their email(s) (optional)" aria-describedby="companion-email-hint" autocomplete="off" inputmode="email" maxlength="2000" disabled>
+        <p id="companion-email-hint" class="rsvp-note">Separate email addresses with commas.</p>
       </div>
       <p class="rsvp-note">We’ll use the email addresses for updates about the evening.</p>
       <button id="rsvp-submit" type="submit">Count me in</button>

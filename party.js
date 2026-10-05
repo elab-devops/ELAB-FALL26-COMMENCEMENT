@@ -54,7 +54,9 @@
       body: JSON.stringify({ guest_email: details.email.trim().toLowerCase(), guest_name: details.name.trim(),
         bringing_someone: !!details.bringingSomeone,
         companion_name: details.bringingSomeone ? details.companionName.trim() : '',
-        companion_email: details.bringingSomeone ? details.companionEmail.trim().toLowerCase() : '' }),
+        companion_email: details.bringingSomeone ? Array.from(new Set(details.companionEmail.split(',').map(function (email) {
+          return email.trim().toLowerCase();
+        }))).join(', ') : '' }),
       signal: AbortSignal.timeout(15000)
     });
     if (!response.ok) throw new Error('registration-failed');
