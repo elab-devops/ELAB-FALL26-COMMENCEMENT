@@ -82,3 +82,14 @@ node --test tests/party.test.js tests/email.test.js
 Redeploy the generated Edge Function as well as publishing the website.
 GitHub Pages deployment does not deploy Supabase functions or SQL changes.
 For CLI deployment, supabase/config.toml sets the required verify_jwt=false.
+
+## VS Code diagnostics
+
+Install the recommended Deno extension (`denoland.vscode-deno`). The workspace
+settings enable Deno only for supabase/functions so it understands npm: imports
+and the Deno runtime. The website and generator scripts continue using Node.
+Check the generated function with:
+
+```sh
+npx --yes deno check --config supabase/functions/deno.json supabase/functions/send-rsvp-confirmation/index.ts
+```

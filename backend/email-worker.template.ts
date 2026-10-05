@@ -1,5 +1,22 @@
+// @deno-types="npm:@types/nodemailer@7"
 import nodemailer from 'npm:nodemailer@9';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+
+type EmailGuest = {
+  email: string;
+  name: string;
+  bringing_someone: boolean;
+  companion_name: string | null;
+  lease_id: string;
+};
+type EventDetails = {
+  title: string;
+  start: string;
+  end: string;
+  location: string;
+  description: string;
+  url: string;
+};
 
 /* GENERATED_MESSAGE */
 
@@ -30,10 +47,12 @@ Deno.serve(async (request: Request) => {
     let delivered = false;
     try {
       const result = await smtp.sendMail(confirmationMessage(guest, EVENT, GOOGLE_CALENDAR_URL, CALENDAR));
-      delivered = result.accepted?.length > 0;
+      delivered = (result.accepted?.length ?? 0) > 0;
     } catch (failure) {
       // Log only error codes, never addresses, passwords, or SMTP response bodies.
-      console.error('SMTP failure', failure?.code || 'unknown');
+      const code = typeof failure === 'object' && failure !== null && 'code' in failure
+        && typeof failure.code === 'string' ? failure.code : 'unknown';
+      console.error('SMTP failure', code);
     }
     const { error: finishError } = await db.rpc('finish_confirmation_email', {
       recipient_email: guest.email, delivery_lease: guest.lease_id, delivered

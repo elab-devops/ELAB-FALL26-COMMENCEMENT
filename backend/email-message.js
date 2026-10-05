@@ -1,7 +1,8 @@
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
+  const entities = {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[character]);
+  };
+  return String(value).replace(/[&<>"']/g, character => entities[character]);
 }
 
 function confirmationMessage(guest, event, googleCalendarUrl, calendar) {

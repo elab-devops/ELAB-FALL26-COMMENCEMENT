@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
+const { stripTypeScriptTypes } = require('node:module');
 const { confirmationMessage } = require('../backend/email-message');
 const { calendarLinks, calendarFile } = require('../party');
 const config = { window: {} };
@@ -26,9 +27,8 @@ test('email escapes guest names and includes the same calendar as the website', 
 function worker(sendMail) {
   let handler;
   const calls = [];
-  const source = fs.readFileSync('supabase/functions/send-rsvp-confirmation/index.ts', 'utf8')
-    .replace(/^import .*;\n/gm, '').replace('request: Request', 'request')
-    .replace("Deno.env.get('SUPABASE_URL')!", "Deno.env.get('SUPABASE_URL')");
+  const source = stripTypeScriptTypes(fs.readFileSync('supabase/functions/send-rsvp-confirmation/index.ts', 'utf8')
+    .replace(/^import .*;\n/gm, ''));
   vm.runInNewContext(source, {
     Response, Intl, console: { error() {} },
     Deno: { serve(fn) { handler = fn; }, env: { get(key) { return {
