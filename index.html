@@ -18,13 +18,13 @@ a{color:inherit}
 
 /* 1. opening */
 .open{align-items:center;position:relative;padding:0}
-.logo{width:clamp(130px,16vw,180px);height:auto;display:block;animation:fade 800ms ease-out both}
-.logo-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
-.countdown{display:flex;align-items:flex-start;gap:.85rem;color:#666;font-variant-numeric:tabular-nums;text-align:center}
-.countdown-unit{display:flex;flex-direction:column;gap:.4rem}
-.countdown-unit b{font-size:1.25rem;font-weight:300;line-height:1}
-.countdown-unit span{font-size:.55rem;letter-spacing:.15em}
-.countdown-divider{font-size:1rem;font-weight:200;line-height:1}
+.logo{width:100%;height:auto;display:block;animation:fade 800ms ease-out both}
+.logo-wrap{position:relative;width:clamp(130px,16vw,180px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.countdown{display:flex;width:100%;align-items:baseline;justify-content:space-between;color:#666;font-variant-numeric:tabular-nums;text-align:center}
+.countdown-unit{display:flex;align-items:baseline;gap:.1rem}
+.countdown-unit b{font-size:.75rem;font-weight:300;line-height:1}
+.countdown-unit span{font-size:.55rem;line-height:1}
+.countdown-divider{font-size:.65rem;font-weight:200;line-height:1}
 .cue{position:absolute;top:calc(100% + 28px);left:50%;transform:translateX(-50%);width:12px;height:22px;animation:fade 800ms ease-out 400ms both}
 .cue svg{position:absolute;left:0;width:12px;height:6px;overflow:visible;opacity:0;animation:breathe 2s ease-in-out infinite}
 .cue svg:nth-child(1){top:0}
@@ -134,10 +134,10 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 <section class="open" aria-label="ELAB Fall 2026">
   <div class="logo-wrap">
     <div class="countdown" role="timer" aria-label="Time until 17 October 2026 at 19:00 Berlin time">
-      <div class="countdown-unit"><b data-countdown>--</b><span>DD</span></div><span class="countdown-divider" aria-hidden="true">/</span>
-      <div class="countdown-unit"><b data-countdown>--</b><span>HH</span></div><span class="countdown-divider" aria-hidden="true">/</span>
-      <div class="countdown-unit"><b data-countdown>--</b><span>MM</span></div><span class="countdown-divider" aria-hidden="true">/</span>
-      <div class="countdown-unit"><b data-countdown>--</b><span>SS</span></div>
+      <div class="countdown-unit"><b data-countdown>--</b><span>d</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>h</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>m</span></div><span class="countdown-divider" aria-hidden="true">/</span>
+      <div class="countdown-unit"><b data-countdown>--</b><span>s</span></div>
     </div>
     <svg class="logo" viewBox="0 0 170 40" role="img" aria-label="ELAB FALL 2026">
       <text x="85" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-weight="300" font-size="16" letter-spacing="3" fill="#000">ELAB FALL 2026</text>
@@ -154,7 +154,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   <div class="details">
     <div class="reveal"><div class="label">When</div><p>Saturday, 17 October 2026, 19:00</p></div>
     <div class="reveal"><div class="label">What</div><p>ELAB Commencement Evening</p></div>
-    <div class="reveal"><div class="label">Where</div><p>Munich.</p><p class="secret">Soon.</p></div>
+    <div class="reveal"><div class="label">Where</div><p>Munich.</p><p class="secret">Details soon.</p></div>
   </div>
   <p class="rsvp reveal"><a class="rsvp-down" href="#rsvp">RSVP</a></p>
 </section>
