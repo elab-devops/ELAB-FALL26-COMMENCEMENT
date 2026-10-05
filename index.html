@@ -84,8 +84,8 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 .yn-options{display:flex;align-items:center;gap:.6rem}
 .rsvp-form .yn-choice{position:relative;cursor:pointer}
 .yn-choice input{position:absolute;width:1px;height:1px;opacity:0}
-.yn-choice span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid transparent;border-radius:50%;font-size:.95rem;font-weight:300;color:#000}
-.yn-choice input:checked+span{border-color:#000;font-weight:600}
+.yn-choice span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-bottom:1px solid transparent;font-size:.95rem;font-weight:300;color:#000}
+.yn-choice input:checked+span{border-bottom-color:#aaa}
 .yn-choice input:focus-visible+span{outline:1px solid #000;outline-offset:3px}
 .yn-divider{font-size:.85rem;font-weight:200;color:#777}
 .companion-fields{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.5rem}
@@ -183,7 +183,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
         </div>
       </fieldset>
       <div id="companion-fields" class="companion-fields" hidden>
-        <label for="companion-name">Their name</label>
+        <label for="companion-name">Their name(s)</label>
         <input id="companion-name" name="companionName" type="text" autocomplete="off" maxlength="100" disabled>
         <label for="companion-email">Their email <span class="optional">(optional)</span></label>
         <input id="companion-email" name="companionEmail" type="email" autocomplete="off" inputmode="email" maxlength="254" disabled>
