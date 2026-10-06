@@ -18,6 +18,10 @@ type EventDetails = {
   description: string;
   url: string;
 };
+type OrganizerGuest = EmailGuest & {
+  companion_email: string | null;
+  interested_in_speaking: boolean;
+};
 
 const EVENT = {"title":"ELAB Commencement Evening","start":"2026-10-17T19:00:00+02:00","end":"2026-10-18T00:00:00+02:00","location":"Munich — location coming soon","description":"Location coming soon, see you there.","url":"https://elab-devops.github.io/ELAB-FALL26-COMMENCEMENT/"};
 function escapeHTML(value: unknown): string {
@@ -29,12 +33,12 @@ function escapeHTML(value: unknown): string {
 
 function confirmationMessage(guest: EmailGuest, event: EventDetails) {
   const date = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/Berlin', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  }).format(new Date(event.start));
-  const time = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
-  }).format(new Date(event.start));
-  const details = `${date}, ${time}, ${event.location.replace(/ — /g, ' - ')}. Your calendar invitation will follow.`;
+    timeZone: 'Europe/Berlin', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'
+  }).format(new Date(event.start)).toUpperCase();
+  const time = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin', hour: 'numeric', hour12: true
+  }).format(new Date(event.start)).replace(/\s/g, '');
+  const eventHeader = `${date}, ${time}, MUC`;
   const opening = "you're in. See you at commencement.";
   const speaking = 'Want to shape the evening? We have room for 2–3 stories. Reply to this email with a few words about what you’d like to share.';
   return {
@@ -42,8 +46,23 @@ function confirmationMessage(guest: EmailGuest, event: EventDetails) {
     replyTo: 'anna.papanakli@tum-ai.com',
     to: { address: guest.email },
     subject: 'You’re on the list — ELAB Fall 2026',
-    text: `Hi ${guest.name},\n\n${opening}\n\n${details}\n\n${speaking}\n\nSee you there,\nELAB`,
-    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="letter-spacing:3px;font-size:13px">ELAB FALL 2026</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>${escapeHTML(details)}</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
+    text: `ELAB FALL 2026 | ${eventHeader}\n\nHi ${guest.name},\n\n${opening}\n\nYour calendar invitation will follow.\n\n${speaking}\n\nSee you there,\nELAB`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><table role="presentation" style="width:100%;border-collapse:collapse;margin-bottom:24px"><tr><td style="padding:0 12px 0 0;font-size:10px;letter-spacing:2px;vertical-align:top">ELAB FALL 2026</td><td style="padding:0;font-size:10px;letter-spacing:.5px;text-align:right;vertical-align:top">${escapeHTML(eventHeader)}</td></tr></table><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>Your calendar invitation will follow.</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
+  };
+}
+
+function organizerMessage(guest: OrganizerGuest) {
+  const companions = guest.bringing_someone
+    ? `${guest.companion_name || 'Not provided'}\nCompanion email(s): ${guest.companion_email || 'Not provided (optional)'}`
+    : 'None';
+  const speaking = guest.interested_in_speaking ? 'Yes — interested in sharing a story' : 'Not selected';
+  return {
+    from: { name: 'ELAB RSVP', address: 'anna.papanakli@tum-ai.com' },
+    to: { address: 'anna.papanakli@tum-ai.com' },
+    replyTo: { address: guest.email },
+    subject: `New ELAB RSVP — ${guest.name.replace(/[\r\n]/g, ' ')}`,
+    text: `A new guest has RSVPed.\n\nName: ${guest.name}\nEmail: ${guest.email}\n\nCompanion(s): ${companions}\n\nSpeaking interest: ${speaking}\n\nAdd their email address and any provided companion addresses to your ELAB Google Calendar event, then save and send the invitations.`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="letter-spacing:3px;font-size:13px">ELAB RSVP</p><h1 style="font-weight:400">A new guest is coming.</h1><p>${escapeHTML(guest.name)}<br>${escapeHTML(guest.email)}</p><p>Companion(s):<br>${escapeHTML(companions).replace(/\n/g, '<br>')}</p><p>Speaking interest: ${escapeHTML(speaking)}</p><p>Add their email address and any provided companion addresses to your ELAB Google Calendar event, then save and send the invitations.</p></div>`
   };
 }
 
@@ -89,6 +108,26 @@ Deno.serve(async (request: Request) => {
     if (finishError) console.error('Could not record delivery status');
     if (delivered) sent++; else failed++;
   }
+  const { data: notifications, error: notificationError } = await db.rpc('claim_organizer_notifications');
+  let organizerSent = 0, organizerFailed = 0;
+  if (notificationError) console.error('Could not claim organizer notifications; check migration');
+  for (const guest of notifications || []) {
+    let delivered = false;
+    try {
+      const result = await smtp.sendMail(organizerMessage(guest));
+      delivered = (result.accepted?.length ?? 0) > 0;
+    } catch (failure) {
+      const code = typeof failure === 'object' && failure !== null && 'code' in failure
+        && typeof failure.code === 'string' ? failure.code : 'unknown';
+      console.error('Organizer SMTP failure', code);
+    }
+    const { error: finishError } = await db.rpc('finish_organizer_notification', {
+      recipient_email: guest.email, delivery_lease: guest.lease_id, delivered
+    });
+    if (finishError) console.error('Could not record organizer notification status');
+    if (delivered) organizerSent++; else organizerFailed++;
+  }
   smtp.close();
-  return Response.json({ sent, failed });
+  return Response.json({ sent, failed, organizerSent, organizerFailed,
+    organizerQueueReady: !notificationError });
 });

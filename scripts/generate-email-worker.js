@@ -7,6 +7,7 @@ const message = fs.readFileSync('backend/email-message.js', 'utf8')
   .replace(/if \(typeof module[^\n]+\n?/, '')
   .replace('function escapeHTML(value)', 'function escapeHTML(value: unknown): string')
   .replace('const entities =', 'const entities: Record<string, string> =')
+  .replace('function organizerMessage(guest)', 'function organizerMessage(guest: OrganizerGuest)')
   .replace('function confirmationMessage(guest, event)',
     'function confirmationMessage(guest: EmailGuest, event: EventDetails)');
 const constants = `const EVENT = ${JSON.stringify(event)};\n`;

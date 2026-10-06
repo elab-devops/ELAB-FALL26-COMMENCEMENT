@@ -54,3 +54,12 @@ guests. When the venue is confirmed, edit the event’s location and choose Send
 updates. Update site-config.js and redeploy the generated email function too so
 future confirmations show the venue. Google Calendar is not connected to Supabase.
 Email verification and self-service cancellation are not included.
+
+
+## Organizer notifications
+
+Run backend/organizer-notifications.sql and redeploy send-rsvp-confirmation to
+notify anna.papanakli@tum-ai.com of each new RSVP. See
+[ORGANIZER_NOTIFICATIONS.md](ORGANIZER_NOTIFICATIONS.md). The targeted test reset
+is backend/reset-test-rsvp.sql. These SQL changes require running in Supabase;
+pushing them to GitHub does not apply them.

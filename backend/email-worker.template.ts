@@ -17,6 +17,10 @@ type EventDetails = {
   description: string;
   url: string;
 };
+type OrganizerGuest = EmailGuest & {
+  companion_email: string | null;
+  interested_in_speaking: boolean;
+};
 
 /* GENERATED_MESSAGE */
 
@@ -60,6 +64,26 @@ Deno.serve(async (request: Request) => {
     if (finishError) console.error('Could not record delivery status');
     if (delivered) sent++; else failed++;
   }
+  const { data: notifications, error: notificationError } = await db.rpc('claim_organizer_notifications');
+  let organizerSent = 0, organizerFailed = 0;
+  if (notificationError) console.error('Could not claim organizer notifications; check migration');
+  for (const guest of notifications || []) {
+    let delivered = false;
+    try {
+      const result = await smtp.sendMail(organizerMessage(guest));
+      delivered = (result.accepted?.length ?? 0) > 0;
+    } catch (failure) {
+      const code = typeof failure === 'object' && failure !== null && 'code' in failure
+        && typeof failure.code === 'string' ? failure.code : 'unknown';
+      console.error('Organizer SMTP failure', code);
+    }
+    const { error: finishError } = await db.rpc('finish_organizer_notification', {
+      recipient_email: guest.email, delivery_lease: guest.lease_id, delivered
+    });
+    if (finishError) console.error('Could not record organizer notification status');
+    if (delivered) organizerSent++; else organizerFailed++;
+  }
   smtp.close();
-  return Response.json({ sent, failed });
+  return Response.json({ sent, failed, organizerSent, organizerFailed,
+    organizerQueueReady: !notificationError });
 });
