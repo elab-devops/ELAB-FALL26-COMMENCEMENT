@@ -46,8 +46,8 @@ function confirmationMessage(guest: EmailGuest, event: EventDetails) {
     replyTo: 'anna.papanakli@tum-ai.com',
     to: { address: guest.email },
     subject: 'You’re on the list — ELAB Fall 2026',
-    text: `ELAB FALL 2026 | ${eventHeader}\n\nHi ${guest.name},\n\n${opening}\n\nYour calendar invitation will follow.\n\n${speaking}\n\nSee you there,\nELAB`,
-    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><table role="presentation" style="width:100%;border-collapse:collapse;margin-bottom:24px"><tr><td style="padding:0 12px 0 0;font-size:10px;letter-spacing:2px;vertical-align:top">ELAB FALL 2026</td><td style="padding:0;font-size:10px;letter-spacing:.5px;text-align:right;vertical-align:top">${escapeHTML(eventHeader)}</td></tr></table><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>Your calendar invitation will follow.</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
+    text: `ELAB FALL 2026 · ${eventHeader}\n\nHi ${guest.name},\n\n${opening}\n\nYour calendar invitation will follow.\n\n${speaking}\n\nSee you there,\nELAB`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="margin:0 0 24px;font-size:10px;letter-spacing:.5px"><span style="letter-spacing:2px">ELAB FALL 2026</span><span aria-hidden="true" style="padding:0 8px;color:#999">·</span>${escapeHTML(eventHeader)}</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>Your calendar invitation will follow.</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
   };
 }
 
