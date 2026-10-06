@@ -43,7 +43,7 @@ function confirmationMessage(guest: EmailGuest, event: EventDetails) {
     to: { address: guest.email },
     subject: 'You’re on the list — ELAB Fall 2026',
     text: `Hi ${guest.name},\n\n${opening}\n\n${details}\n\n${speaking}\n\nSee you there,\nELAB`,
-    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>${escapeHTML(details)}</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="letter-spacing:3px;font-size:13px">ELAB FALL 2026</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>${escapeHTML(details)}</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
   };
 }
 

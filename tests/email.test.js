@@ -27,6 +27,8 @@ test('email escapes names and promises a separate invitation without calendar co
   assert.ok(message.text.includes('2–3 stories'));
   assert.ok(message.html.includes('Want to shape the evening?'));
   assert.equal(message.replyTo, 'anna.papanakli@tum-ai.com');
+  assert.ok(message.html.includes('ELAB FALL 2026</p>'));
+  assert.ok(message.html.includes('You’re on the list.</h1>'));
 });
 
 function worker(sendMail) {
