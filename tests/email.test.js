@@ -14,9 +14,8 @@ test('email escapes names and promises a separate invitation without calendar co
   const message = confirmationMessage(guest, event);
   assert.ok(message.html.includes('&lt;img src=x&gt;'));
   assert.ok(!message.html.includes('<img src=x>'));
-  assert.ok(message.html.includes('Alex &amp; Sam'));
   assert.ok(message.text.includes('19:00'));
-  assert.ok(message.text.includes('Munich time'));
+  assert.ok(message.text.includes('Saturday, 17 October 2026, 19:00, Munich - location coming soon.'));
   assert.ok(!message.text.includes('Berlin time'));
   assert.equal(message.to.address, guest.email);
   assert.equal(message.from.address, 'anna.papanakli@tum-ai.com');
@@ -25,6 +24,9 @@ test('email escapes names and promises a separate invitation without calendar co
   assert.ok(message.html.includes('Your calendar invitation will follow.'));
   assert.ok(!message.html.includes('calendar.google.com'));
   assert.ok(!message.text.includes('.ics'));
+  assert.ok(message.text.includes('2–3 stories'));
+  assert.ok(message.html.includes('Want to shape the evening?'));
+  assert.equal(message.replyTo, 'anna.papanakli@tum-ai.com');
 });
 
 function worker(sendMail) {
@@ -74,4 +76,10 @@ test('SMTP failures leave the registration queued for retry', async () => {
   }));
   assert.deepEqual(await response.json(), { sent: 0, failed: 1 });
   assert.equal(calls[1].args.delivered, false);
+});
+
+
+test('confirmation uses the requested copy with a personalized greeting', () => {
+  const message = confirmationMessage({ ...guest, name: 'Anna' }, event);
+  assert.equal(message.text, "Hi Anna,\n\nyou're in. See you at commencement.\n\nSaturday, 17 October 2026, 19:00, Munich - location coming soon. Your calendar invitation will follow.\n\nWant to shape the evening? We have room for 2–3 stories. Reply to this email with a few words about what you’d like to share.\n\nSee you there,\nELAB");
 });
