@@ -63,6 +63,8 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 .ov{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;justify-content:flex-start;padding:.8rem;overflow-y:auto;opacity:0;transition:opacity 300ms ease}
 .frame:hover .ov,.frame:focus-visible .ov,.frame:focus .ov,.frame:focus-within .ov{opacity:1}
 .frame:hover,.frame:focus,.frame:focus-within{opacity:1!important}
+.profile-arrow{position:absolute;right:.6rem;bottom:.6rem;z-index:2;display:grid;place-items:center;width:1.6rem;height:1.6rem;background:rgba(255,255,255,.85);color:#666;font-size:1rem;text-decoration:none}
+.profile-arrow:focus-visible{outline:1px solid #888;outline-offset:2px}
 .profile-link{display:inline-block;font-size:.65rem;font-weight:400;letter-spacing:.12em;color:#666;margin-top:.75rem;text-decoration:underline;text-underline-offset:3px}
 .ov b,.under b{display:block;font-weight:300;font-size:.95rem;line-height:1.3}
 .ov i,.under i{display:block;font-style:normal;font-weight:200;font-size:.8rem;line-height:1.45;color:#666}
@@ -278,6 +280,10 @@ var PHOTOS=[
         box.querySelectorAll('i').forEach(function(el){el.textContent=p[1]});
       });
       if(p[2]){
+        var arrow=document.createElement('a');arrow.className='profile-arrow';
+        arrow.href=p[2];arrow.target='_blank';arrow.rel='noopener noreferrer';
+        arrow.textContent='↗';arrow.setAttribute('aria-label',p[0]+' on LinkedIn');
+        f.appendChild(arrow);
         [f.querySelector('.ov'),u].forEach(function(box){
           var link=document.createElement('a');link.className='profile-link';
           link.href=p[2];link.target='_blank';link.rel='noopener noreferrer';
