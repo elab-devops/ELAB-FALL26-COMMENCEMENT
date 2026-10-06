@@ -14,14 +14,14 @@ function confirmationMessage(guest, event) {
   }).format(new Date(event.start)).replace(/\s/g, '');
   const eventHeader = `${date}, ${time}, MUC`;
   const opening = "you're in. See you at commencement.";
-  const speaking = 'Want to shape the evening? We have room for 2–3 stories. Reply to this email with a few words about what you’d like to share.';
+  const speaking = 'Want to shape the evening? We have room for 2–3 stories from our people. Reply to this email with a few words about what you’d like to share.';
   return {
     from: { name: 'ELAB', address: 'anna.papanakli@tum-ai.com' },
     replyTo: 'anna.papanakli@tum-ai.com',
     to: { address: guest.email },
     subject: 'You’re on the list — ELAB Fall 2026',
-    text: `ELAB FALL 2026 · ${eventHeader}\n\nHi ${guest.name},\n\n${opening}\n\nYour calendar invitation will follow.\n\n${speaking}\n\nSee you there,\nELAB`,
-    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="margin:0 0 24px;font-size:10px;letter-spacing:.5px"><span style="letter-spacing:2px">ELAB FALL 2026</span><span aria-hidden="true" style="padding:0 8px;color:#999">·</span>${escapeHTML(eventHeader)}</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>Your calendar invitation will follow.</p><p>${escapeHTML(speaking)}</p><p>See you there,<br>ELAB</p></div>`
+    text: `ELAB FALL 2026 · ${eventHeader}\n\nHi ${guest.name},\n\n${opening}\n\n${speaking}\n\nYour calendar invitation will follow.\n\nSee you there,\nELAB`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="margin:0 0 24px;font-size:10px;letter-spacing:.5px"><span style="letter-spacing:2px">ELAB FALL 2026</span><span aria-hidden="true" style="padding:0 8px;color:#999">·</span>${escapeHTML(eventHeader)}</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>${escapeHTML(opening)}</p><p>${escapeHTML(speaking).replace('2–3 stories from our people', '<strong>2–3 stories from our people</strong>')}</p><p>Your calendar invitation will follow.</p><p>See you there,<br>ELAB</p></div>`
   };
 }
 

@@ -26,6 +26,8 @@ test('email escapes names and promises a separate invitation without calendar co
   assert.ok(!message.text.includes('.ics'));
   assert.ok(message.text.includes('2–3 stories'));
   assert.ok(message.html.includes('Want to shape the evening?'));
+  assert.ok(message.html.includes('<strong>2–3 stories from our people</strong>'));
+  assert.ok(message.html.indexOf('Want to shape') < message.html.indexOf('Your calendar invitation will follow.'));
   assert.equal(message.replyTo, 'anna.papanakli@tum-ai.com');
   assert.ok(message.html.includes('ELAB FALL 2026</span>'));
   assert.ok(message.html.includes('SAT, 17 OCT 2026, 7PM, MUC</p>'));
@@ -84,7 +86,7 @@ test('SMTP failures leave the registration queued for retry', async () => {
 
 test('confirmation uses the requested copy with a personalized greeting', () => {
   const message = confirmationMessage({ ...guest, name: 'Anna' }, event);
-  assert.equal(message.text, "ELAB FALL 2026 · SAT, 17 OCT 2026, 7PM, MUC\n\nHi Anna,\n\nyou're in. See you at commencement.\n\nYour calendar invitation will follow.\n\nWant to shape the evening? We have room for 2–3 stories. Reply to this email with a few words about what you’d like to share.\n\nSee you there,\nELAB");
+  assert.equal(message.text, "ELAB FALL 2026 · SAT, 17 OCT 2026, 7PM, MUC\n\nHi Anna,\n\nyou're in. See you at commencement.\n\nWant to shape the evening? We have room for 2–3 stories from our people. Reply to this email with a few words about what you’d like to share.\n\nYour calendar invitation will follow.\n\nSee you there,\nELAB");
 });
 
 
