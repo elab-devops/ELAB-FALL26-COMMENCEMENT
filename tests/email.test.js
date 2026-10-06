@@ -4,15 +4,14 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const { stripTypeScriptTypes } = require('node:module');
 const { confirmationMessage } = require('../backend/email-message');
-const { calendarLinks, calendarFile } = require('../party');
 const config = { window: {} };
 vm.runInNewContext(fs.readFileSync('site-config.js', 'utf8'), config);
 const event = config.window.ELAB_CONFIG.event;
 const guest = { email: 'guest@example.com', name: '<img src=x>', bringing_someone: true,
   companion_name: 'Alex & Sam', lease_id: 'lease' };
 
-test('email escapes guest names and includes the same calendar as the website', () => {
-  const message = confirmationMessage(guest, event, calendarLinks(event).google, calendarFile(event));
+test('email escapes names and promises a separate invitation without calendar copies', () => {
+  const message = confirmationMessage(guest, event);
   assert.ok(message.html.includes('&lt;img src=x&gt;'));
   assert.ok(!message.html.includes('<img src=x>'));
   assert.ok(message.html.includes('Alex &amp; Sam'));
@@ -21,7 +20,11 @@ test('email escapes guest names and includes the same calendar as the website', 
   assert.ok(!message.text.includes('Berlin time'));
   assert.equal(message.to.address, guest.email);
   assert.equal(message.from.address, 'anna.papanakli@tum-ai.com');
-  assert.equal(message.attachments[0].content, fs.readFileSync('event.ics', 'utf8'));
+  assert.equal(message.attachments, undefined);
+  assert.ok(message.text.includes('Your calendar invitation will follow.'));
+  assert.ok(message.html.includes('Your calendar invitation will follow.'));
+  assert.ok(!message.html.includes('calendar.google.com'));
+  assert.ok(!message.text.includes('.ics'));
 });
 
 function worker(sendMail) {

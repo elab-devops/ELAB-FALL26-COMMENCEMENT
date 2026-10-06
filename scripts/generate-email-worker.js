@@ -1,6 +1,5 @@
 const fs = require('node:fs');
 const vm = require('node:vm');
-const { calendarFile, calendarLinks } = require('../party.js');
 const context = { window: {} };
 vm.runInNewContext(fs.readFileSync('site-config.js', 'utf8'), context);
 const event = context.window.ELAB_CONFIG.event;
@@ -8,9 +7,9 @@ const message = fs.readFileSync('backend/email-message.js', 'utf8')
   .replace(/if \(typeof module[^\n]+\n?/, '')
   .replace('function escapeHTML(value)', 'function escapeHTML(value: unknown): string')
   .replace('const entities =', 'const entities: Record<string, string> =')
-  .replace('function confirmationMessage(guest, event, googleCalendarUrl, calendar)',
-    'function confirmationMessage(guest: EmailGuest, event: EventDetails, googleCalendarUrl: string, calendar: string)');
-const constants = `const EVENT = ${JSON.stringify(event)};\nconst GOOGLE_CALENDAR_URL = ${JSON.stringify(calendarLinks(event).google)};\nconst CALENDAR = ${JSON.stringify(calendarFile(event))};\n`;
+  .replace('function confirmationMessage(guest, event)',
+    'function confirmationMessage(guest: EmailGuest, event: EventDetails)');
+const constants = `const EVENT = ${JSON.stringify(event)};\n`;
 const template = fs.readFileSync('backend/email-worker.template.ts', 'utf8');
 fs.mkdirSync('supabase/functions/send-rsvp-confirmation', { recursive: true });
 fs.writeFileSync('supabase/functions/send-rsvp-confirmation/index.ts',

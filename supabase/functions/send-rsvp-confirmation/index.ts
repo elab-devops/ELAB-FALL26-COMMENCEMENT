@@ -20,8 +20,6 @@ type EventDetails = {
 };
 
 const EVENT = {"title":"ELAB Commencement Evening","start":"2026-10-17T19:00:00+02:00","end":"2026-10-18T00:00:00+02:00","location":"Munich — location coming soon","description":"Location coming soon, see you there.","url":"https://elab-devops.github.io/ELAB-FALL26-COMMENCEMENT/"};
-const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=ELAB+Commencement+Evening&dates=20261017T170000Z%2F20261017T220000Z&ctz=Europe%2FBerlin&location=Munich+%E2%80%94+location+coming+soon&details=Location+coming+soon%2C+see+you+there.%0Ahttps%3A%2F%2Felab-devops.github.io%2FELAB-FALL26-COMMENCEMENT%2F";
-const CALENDAR = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//ELAB//Fall 2026//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:elab-fall26-commencement@elab-devops.github.io\r\nDTSTAMP:20261005T000000Z\r\nDTSTART:20261017T170000Z\r\nDTEND:20261017T220000Z\r\nSUMMARY:ELAB Commencement Evening\r\nLOCATION:Munich — location coming soon\r\nDESCRIPTION:Location coming soon\\, see you there.\\nhttps://elab-devops.gith\r\n ub.io/ELAB-FALL26-COMMENCEMENT/\r\nURL:https://elab-devops.github.io/ELAB-FALL26-COMMENCEMENT/\r\nSTATUS:CONFIRMED\r\nTRANSP:OPAQUE\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n";
 function escapeHTML(value: unknown): string {
   const entities: Record<string, string> = {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -29,7 +27,7 @@ function escapeHTML(value: unknown): string {
   return String(value).replace(/[&<>"']/g, character => entities[character]);
 }
 
-function confirmationMessage(guest: EmailGuest, event: EventDetails, googleCalendarUrl: string, calendar: string) {
+function confirmationMessage(guest: EmailGuest, event: EventDetails) {
   const date = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/Berlin', weekday: 'long', day: 'numeric', month: 'long',
     year: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
@@ -42,9 +40,8 @@ function confirmationMessage(guest: EmailGuest, event: EventDetails, googleCalen
     replyTo: 'anna.papanakli@tum-ai.com',
     to: { address: guest.email },
     subject: 'You’re on the list — ELAB Fall 2026',
-    text: `Hi ${guest.name},\n\nYou’re on the list for ${event.title}.\n${date} (Munich time)\n${event.location}\n\n${companion}\n${closing}\n\nAdd to Google Calendar: ${googleCalendarUrl}\nFor Apple Calendar or Outlook, open the attached ELAB.ics file.\n\nSee you there,\nELAB`,
-    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="letter-spacing:3px;font-size:13px">ELAB FALL 2026</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>We’ve saved your RSVP for ${escapeHTML(event.title)}.</p><p>${escapeHTML(date)} (Munich time)<br>${escapeHTML(event.location)}</p>${companion ? `<p>${escapeHTML(companion)}</p>` : ''}<p>${closing}</p><p><a style="display:inline-block;padding:12px 20px;background:#000;color:#fff;text-decoration:none" href="${escapeHTML(googleCalendarUrl)}">Add to Google Calendar</a></p><p style="font-size:13px;color:#666">For Apple Calendar or Outlook, open the attached ELAB.ics file.</p><p>See you there,<br>ELAB</p></div>`,
-    attachments: [{ filename: 'ELAB.ics', content: calendar, contentType: 'text/calendar; charset=utf-8; method=PUBLISH' }]
+    text: `Hi ${guest.name},\n\nYou’re on the list for ${event.title}.\n${date} (Munich time)\n${event.location}\n\n${companion}\n${closing}\n\nYour calendar invitation will follow.\n\nSee you there,\nELAB`,
+    html: `<div style="font-family:Arial,sans-serif;color:#222;max-width:520px;margin:auto;padding:32px 16px;line-height:1.6"><p style="letter-spacing:3px;font-size:13px">ELAB FALL 2026</p><h1 style="font-weight:400">You’re on the list.</h1><p>Hi ${escapeHTML(guest.name)},</p><p>We’ve saved your RSVP for ${escapeHTML(event.title)}.</p><p>${escapeHTML(date)} (Munich time)<br>${escapeHTML(event.location)}</p>${companion ? `<p>${escapeHTML(companion)}</p>` : ''}<p>${closing}</p><p>Your calendar invitation will follow.</p><p>See you there,<br>ELAB</p></div>`
   };
 }
 
@@ -76,7 +73,7 @@ Deno.serve(async (request: Request) => {
   for (const guest of guests || []) {
     let delivered = false;
     try {
-      const result = await smtp.sendMail(confirmationMessage(guest, EVENT, GOOGLE_CALENDAR_URL, CALENDAR));
+      const result = await smtp.sendMail(confirmationMessage(guest, EVENT));
       delivered = (result.accepted?.length ?? 0) > 0;
     } catch (failure) {
       // Log only error codes, never addresses, passwords, or SMTP response bodies.

@@ -46,7 +46,7 @@ Deno.serve(async (request: Request) => {
   for (const guest of guests || []) {
     let delivered = false;
     try {
-      const result = await smtp.sendMail(confirmationMessage(guest, EVENT, GOOGLE_CALENDAR_URL, CALENDAR));
+      const result = await smtp.sendMail(confirmationMessage(guest, EVENT));
       delivered = (result.accepted?.length ?? 0) > 0;
     } catch (failure) {
       // Log only error codes, never addresses, passwords, or SMTP response bodies.

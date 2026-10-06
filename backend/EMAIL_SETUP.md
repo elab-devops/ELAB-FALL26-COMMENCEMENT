@@ -2,8 +2,11 @@
 
 The sender is ELAB <anna.papanakli@tum-ai.com>. Each new RSVP queues one email
 to the registering guest (companions do not receive a separate message).
-The email includes the event details, a Google Calendar button, and ELAB.ics
-for Apple Calendar and Outlook. No guest login is required.
+The email includes the event details and “Your calendar invitation will follow.”
+It contains no calendar link or attachment. Anna manually adds RSVP addresses to
+the Google Calendar event she owns, with the guest list hidden. Future location
+changes are sent by editing that event and choosing Send updates. No Google API
+credentials are needed for this workflow.
 
 ## Activate in Supabase
 
@@ -24,8 +27,8 @@ for Apple Calendar and Outlook. No guest login is required.
 4. Run backend/email-schedule.sql in SQL Editor. This schedules the private
    worker every minute. Public website code and its keys stay unchanged.
 5. Submit a new RSVP using an email you own. Within roughly a minute, check
-   the inbox and spam folder and open the calendar attachment. Confirm it
-   starts October 17 at 19:00 Munich time. Gmail acceptance is not proof of inbox delivery.
+   the inbox and spam folder. Confirm it says the calendar invitation will
+   follow and has no attachment. Gmail acceptance is not proof of inbox delivery.
 
 Existing registrations are not emailed automatically. To test using Anna's
 already registered personal address, explicitly queue only that registration:
@@ -66,15 +69,15 @@ select cron.unschedule('elab-confirmation-emails');
 ```
 
 Do not share full SMTP errors containing guest addresses or credentials.
-Gmail sending limits apply. This setup sends calendar copies; imported events
-do not update automatically when the venue changes. Send a venue update later.
+Gmail sending limits apply. Send calendar invitations separately from Anna’s
+Google Calendar event. Previously imported calendar copies do not update; guests
+may need to remove those old copies when accepting the organizer’s invitation.
 
 ## Maintaining event details
 
 Event details come from site-config.js. After a change run:
 
 ```sh
-node scripts/generate-calendar.js
 node scripts/generate-email-worker.js
 node --test tests/party.test.js tests/email.test.js
 ```

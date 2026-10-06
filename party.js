@@ -76,11 +76,6 @@
     if (Date.now() >= Date.parse(config.event.start)) clearInterval(clock);
     document.addEventListener('visibilitychange', update);
 
-    var links = calendarLinks(config.event);
-    document.getElementById('calendar-google').href = links.google;
-    document.getElementById('calendar-apple').href = links.apple;
-    document.getElementById('calendar-outlook').href = links.outlook;
-
     var form = document.getElementById('rsvp-form');
     var button = document.getElementById('rsvp-submit');
     var status = document.getElementById('rsvp-status');

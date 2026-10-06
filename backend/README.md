@@ -27,7 +27,7 @@ Export the results as CSV. Keep `elab_private` out of the Data API's exposed sch
 
 ## Confirmation emails
 
-Optional Gmail confirmations with a Google Calendar button and calendar attachment
+Optional Gmail confirmations promising a separate calendar invitation
 are prepared in [EMAIL_SETUP.md](EMAIL_SETUP.md). They require deploying the
 Supabase Edge Function and running the queue and schedule SQL; pushing website
 files alone does not activate emails.
@@ -41,12 +41,16 @@ the updated `backend/setup.sql`. Each address is validated individually;
 the combined field has a 2,000-character limit. Confirmation emails still go
 to the registering guest only. Repeat submissions keep the original RSVP.
 
-## Calendar and event details
+## Calendar invitations and event details
 
-Event times are defined in `site-config.js`. The event ends at midnight (24:00 on October 17, stored as 00:00 on October 18) Munich time. Generate the downloadable calendar after changing those details:
+Event times are defined in `site-config.js`. The evening ends at midnight
+(00:00 on October 18) Munich time. The RSVP confirmation says “Your calendar
+invitation will follow.” The website and email do not offer independent calendar
+copies. The old event.ics file is retained for legacy imports but is no longer linked.
 
-```sh
-node scripts/generate-calendar.js
-```
-
-Google opens a prefilled calendar event. Apple/iCloud and Outlook import `event.ics`. These are calendar copies: deleting one is not an RSVP cancellation, and later location changes do not automatically update imported copies. Send location updates to the collected guest emails. Email confirmations require the separate setup above. Email verification and self-service cancellation are not included.
+Anna manually adds registered email addresses to the Google Calendar event she
+owns. Disable See guest list, Invite others, and Modify event before inviting
+guests. When the venue is confirmed, edit the event’s location and choose Send
+updates. Update site-config.js and redeploy the generated email function too so
+future confirmations show the venue. Google Calendar is not connected to Supabase.
+Email verification and self-service cancellation are not included.
