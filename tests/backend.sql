@@ -1,6 +1,7 @@
 -- Run only against a disposable PostgreSQL database with anon/authenticated roles.
 begin;
 set local role anon;
+select public.register_party_rsvp('speaker@example.com', 'Speaker', false, '', '', true);
 select public.register_party_rsvp(' Guest@Example.com ', 'Anna');
 select public.register_party_rsvp('guest@example.com', 'Overwrite attempt');
 select public.register_party_rsvp('plus-one@example.com', 'Sam', true, ' Alex ', ' Alex@Example.com ');
@@ -52,7 +53,7 @@ $$;
 reset role;
 do $$
 begin
-  if (select count(*) from elab_private.party_rsvps) <> 4 then
+  if (select count(*) from elab_private.party_rsvps) <> 5 then
     raise exception 'Unexpected registration count';
   end if;
   if not exists (select 1 from elab_private.party_rsvps where email = 'multiple@example.com'
@@ -70,7 +71,13 @@ begin
     and bringing_someone and companion_email is null) then
     raise exception 'Optional email was not handled correctly';
   end if;
-  if has_function_privilege('authenticated', 'public.register_party_rsvp(text,text,boolean,text,text)', 'EXECUTE') then
+  if not exists(select 1 from elab_private.party_rsvps where email = 'speaker@example.com' and interested_in_speaking) then
+    raise exception 'Speaking preference was not saved';
+  end if;
+  if exists(select 1 from elab_private.party_rsvps where email <> 'speaker@example.com' and interested_in_speaking) then
+    raise exception 'Default speaking preference is incorrect';
+  end if;
+  if has_function_privilege('authenticated', 'public.register_party_rsvp(text,text,boolean,text,text,boolean)', 'EXECUTE') then
     raise exception 'Unexpected authenticated access';
   end if;
 end;

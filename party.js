@@ -53,6 +53,7 @@
       method: 'POST', headers: { 'Content-Type': 'application/json', apikey: config.supabasePublishableKey },
       body: JSON.stringify({ guest_email: details.email.trim().toLowerCase(), guest_name: details.name.trim(),
         bringing_someone: !!details.bringingSomeone,
+        interested_in_speaking: !!details.interestedInSpeaking,
         companion_name: details.bringingSomeone ? details.companionName.trim() : '',
         companion_email: details.bringingSomeone ? Array.from(new Set(details.companionEmail.split(',').map(function (email) {
           return email.trim().toLowerCase();
@@ -109,6 +110,7 @@
       try {
         await register(config, { email: form.elements.email.value, name: form.elements.guestName.value,
           bringingSomeone: form.elements.bringingSomeone.value === 'y',
+          interestedInSpeaking: form.elements.interestedInSpeaking.checked,
           companionName: form.elements.companionName.value, companionEmail: form.elements.companionEmail.value }, root.fetch.bind(root));
         form.reset(); updateCompanionFields(); form.hidden = true; confirmation.hidden = false;
         document.getElementById('rsvp-confirmed-title').focus();

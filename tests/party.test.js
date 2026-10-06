@@ -45,7 +45,7 @@ test('RSVP sends normalized details through a POST body with the public key', as
   assert.equal(request.url, 'https://project.supabase.co/rest/v1/rpc/register_party_rsvp');
   assert.equal(request.options.method, 'POST');
   assert.deepEqual(JSON.parse(request.options.body), { guest_email: 'guest@example.com', guest_name: 'Anna',
-    bringing_someone: false, companion_name: '', companion_email: '' });
+    bringing_someone: false, interested_in_speaking: false, companion_name: '', companion_email: '' });
   assert.equal(request.options.headers.apikey, 'sb_publishable_example');
 });
 
@@ -82,4 +82,16 @@ test('multiple companion emails are normalized and deduplicated', async () => {
       companionName: 'Alex, Sam', companionEmail: ' Alex@Example.com, sam@example.com, ALEX@example.com ' },
     async (_, options) => { saved = JSON.parse(options.body); return { ok: true }; });
   assert.equal(saved.companion_email, 'alex@example.com, sam@example.com');
+});
+
+
+test('speaking interest is optional and is sent only as a boolean', async () => {
+  const config = { supabaseUrl: 'https://project.supabase.co', supabasePublishableKey: 'key' };
+  const details = { email: 'guest@example.com', name: 'Anna' };
+  let saved;
+  const fetcher = async (_, options) => { saved = JSON.parse(options.body); return { ok: true }; };
+  await register(config, details, fetcher);
+  assert.equal(saved.interested_in_speaking, false);
+  await register(config, { ...details, interestedInSpeaking: true }, fetcher);
+  assert.equal(saved.interested_in_speaking, true);
 });
