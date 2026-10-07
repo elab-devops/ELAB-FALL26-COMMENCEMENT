@@ -1,3 +1,7 @@
 [functions.send-rsvp-confirmation]
 # The handler checks a private worker token. Public callers cannot send mail.
 verify_jwt = false
+
+[functions.organizer-rsvps]
+# This function validates its own password and signed organizer session.
+verify_jwt = false

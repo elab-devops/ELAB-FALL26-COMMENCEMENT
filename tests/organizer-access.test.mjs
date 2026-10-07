@@ -1,0 +1,34 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+let handler, rateAllowed = true, calls=[];
+const secrets = {ORGANIZER_PASSWORD:'test-only-password-long-enough',SUPABASE_URL:'https://example.invalid',SUPABASE_SERVICE_ROLE_KEY:'test-service-key'};
+globalThis.Deno = {env:{get:key=>secrets[key]},serve:fn=>{handler=fn;}};
+globalThis.fetch = async (url,options)=>{
+ calls.push(url);
+ assert.equal(options.headers.Authorization,'Bearer test-service-key');
+ if(url.endsWith('/organizer_login_allowed')) return Response.json(rateAllowed);
+ if(url.endsWith('/organizer_rsvp_list')) return Response.json([{name:'Test guest'}]);
+ throw Error('Unexpected request');
+};
+await import('../supabase/functions/organizer-rsvps/index.ts');
+const send = (body,token,origin='https://elab-devops.github.io')=>handler(new Request('https://example.invalid',{method:'POST',headers:{origin,...(token?{authorization:'Bearer '+token}:{})},body:JSON.stringify(body)}));
+test('organizer access validates password and signed expiring sessions',async()=>{
+ calls=[];
+ assert.equal((await send({action:'list'})).status,401);
+ assert.equal(calls.length,0);
+ assert.equal((await send({action:'login',password:'wrong'})).status,401);
+ const login=await send({action:'login',password:secrets.ORGANIZER_PASSWORD});
+ assert.equal(login.status,200);
+ const {token}=await login.json();
+ assert.equal((await send({action:'list'},token)).status,200);
+ assert.equal((await send({action:'list'},token+'tampered')).status,401);
+ const expired='1.'+token.split('.').slice(1).join('.');
+ assert.equal((await send({action:'list'},expired)).status,401);
+ secrets.ORGANIZER_PASSWORD='rotated-test-only-password';
+ assert.equal((await send({action:'list'},token)).status,401);
+ rateAllowed=false;
+ assert.equal((await send({action:'login',password:secrets.ORGANIZER_PASSWORD})).status,429);
+ assert.equal((await send({action:'login',password:'wrong'},null,'https://other.invalid')).status,403);
+ delete secrets.ORGANIZER_PASSWORD;
+ assert.equal((await send({action:'login',password:'wrong'})).status,503);
+});

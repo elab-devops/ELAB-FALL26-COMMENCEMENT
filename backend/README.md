@@ -63,3 +63,9 @@ notify anna.papanakli@tum-ai.com of each new RSVP. See
 [ORGANIZER_NOTIFICATIONS.md](ORGANIZER_NOTIFICATIONS.md). The targeted test reset
 is backend/reset-test-rsvp.sql. These SQL changes require running in Supabase;
 pushing them to GitHub does not apply them.
+
+## Password-protected organizer page
+
+The `/admin/` page provides search and CSV export behind a backend-verified
+organizer password. Activate it using [ORGANIZER_ACCESS.md](ORGANIZER_ACCESS.md).
+Publishing the page alone does not enable access.
