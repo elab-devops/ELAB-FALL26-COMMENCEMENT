@@ -54,6 +54,7 @@
       body: JSON.stringify({ guest_email: details.email.trim().toLowerCase(), guest_name: details.name.trim(),
         bringing_someone: !!details.bringingSomeone,
         interested_in_speaking: !!details.interestedInSpeaking,
+        invited_by: String(details.invitedBy || '').trim(),
         companion_name: details.bringingSomeone ? details.companionName.trim() : '',
         companion_email: details.bringingSomeone ? Array.from(new Set(details.companionEmail.split(',').map(function (email) {
           return email.trim().toLowerCase();
@@ -109,6 +110,7 @@
       busy = true; button.disabled = true; button.textContent = 'Saving…'; status.textContent = '';
       try {
         await register(config, { email: form.elements.email.value, name: form.elements.guestName.value,
+          invitedBy: form.elements.invitedBy.value,
           bringingSomeone: form.elements.bringingSomeone.value === 'y',
           interestedInSpeaking: form.elements.interestedInSpeaking.checked,
           companionName: form.elements.companionName.value, companionEmail: form.elements.companionEmail.value }, root.fetch.bind(root));

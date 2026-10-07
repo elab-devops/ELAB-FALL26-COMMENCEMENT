@@ -1,25 +1,7 @@
--- Run once in your Supabase project's SQL Editor.
--- Guest data lives outside the public API schema. Only a write-only RSVP function is exposed.
+-- Run before publishing the new RSVP field. Existing registrations are preserved.
 begin;
-create schema if not exists elab_private;
-revoke all on schema elab_private from public, anon, authenticated;
-
-create table if not exists elab_private.party_rsvps (
-  email text primary key check (length(email) between 3 and 254),
-  name text not null check (length(name) between 1 and 100),
-  bringing_someone boolean not null default false,
-  interested_in_speaking boolean not null default false,
-  companion_name text check (length(companion_name) between 1 and 100),
-  companion_email text check (length(companion_email) between 3 and 2000),
-  check ((bringing_someone and companion_name is not null) or
-    (not bringing_someone and companion_name is null and companion_email is null)),
-  registered_at timestamptz not null default now()
-);
 alter table elab_private.party_rsvps add column if not exists invited_by text check (length(invited_by) <= 100);
-alter table elab_private.party_rsvps enable row level security;
 drop function if exists public.register_party_rsvp(text, text, boolean, text, text, boolean);
-revoke all on elab_private.party_rsvps from public, anon, authenticated;
-
 create or replace function public.register_party_rsvp(guest_email text, guest_name text,
   bringing_someone boolean default false, companion_name text default '', companion_email text default '', interested_in_speaking boolean default false, invited_by text default '')
 returns void
@@ -66,4 +48,13 @@ end;
 $$;
 revoke all on function public.register_party_rsvp(text, text, boolean, text, text, boolean, text) from public, anon, authenticated;
 grant execute on function public.register_party_rsvp(text, text, boolean, text, text, boolean, text) to anon;
+create or replace function public.organizer_rsvp_list()
+returns jsonb language sql security definer set search_path = '' as $$
+ select coalesce(jsonb_agg(row_to_json(r) order by r.registered_at desc), '[]'::jsonb)
+ from (select name,email,invited_by,bringing_someone,companion_name,companion_email,
+ interested_in_speaking,invited,companion_count,registered_at from elab_private.party_rsvps) r;
+$$;
+revoke all on function public.organizer_rsvp_list() from public,anon,authenticated;
+grant execute on function public.organizer_rsvp_list() to service_role;
+notify pgrst, 'reload schema';
 commit;

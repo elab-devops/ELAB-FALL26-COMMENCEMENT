@@ -1,4 +1,5 @@
 begin;
+alter table elab_private.party_rsvps add column if not exists invited_by text check (length(invited_by) <= 100);
 alter table elab_private.party_rsvps add column if not exists invited boolean not null default false;
 alter table elab_private.party_rsvps add column if not exists companion_count integer;
 update elab_private.party_rsvps set companion_count = case when bringing_someone then
@@ -26,7 +27,7 @@ $$;
 create or replace function public.organizer_rsvp_list()
 returns jsonb language sql security definer set search_path = '' as $$
  select coalesce(jsonb_agg(row_to_json(r) order by r.registered_at desc), '[]'::jsonb)
- from (select name,email,bringing_someone,companion_name,companion_email,
+ from (select name,email,invited_by,bringing_someone,companion_name,companion_email,
  interested_in_speaking,invited,companion_count,registered_at from elab_private.party_rsvps) r;
 $$;
 create or replace function public.organizer_set_invited(guest_email text, is_invited boolean)

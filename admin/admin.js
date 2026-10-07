@@ -23,11 +23,11 @@
  }
  function render() {
   var query = $('search').value.toLowerCase().trim();
-  var shown = guests.filter(function(g) { return [g.name,g.email,g.companion_name,g.companion_email].join(' ').toLowerCase().includes(query); });
+  var shown = guests.filter(function(g) { return [g.name,g.email,g.companion_name,g.companion_email,g.invited_by].join(' ').toLowerCase().includes(query); });
   $('guests').replaceChildren();
   shown.forEach(function(g) {
    var row = document.createElement('tr');
-   [g.name,g.email,g.bringing_someone ? g.companion_name || 'Yes' : '—',g.companion_email || '—',g.interested_in_speaking ? 'Yes' : '—',new Date(g.registered_at).toLocaleString('en-GB',{timeZone:'Europe/Berlin'})].forEach(function(value) {
+   [g.name,g.email,g.invited_by || '—',g.bringing_someone ? g.companion_name || 'Yes' : '—',g.companion_email || '—',g.interested_in_speaking ? 'Yes' : '—',new Date(g.registered_at).toLocaleString('en-GB',{timeZone:'Europe/Berlin'})].forEach(function(value) {
     var cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell);
    });
    var invitedCell = document.createElement('td');
@@ -80,7 +80,7 @@
  $('search').addEventListener('input',render);
  $('export').addEventListener('click',function() {
   function cell(value) { var text = String(value == null ? '' : value); if (/^[\s]*[=+@\-]/.test(text)) text = "'" + text; return '"' + text.replace(/"/g,'""') + '"'; }
-  var rows = [['Name','Email','Bringing someone','Companion(s)','Companion email(s)','Speaker interest','Registered at (UTC)','Invited','Companion count']].concat(guests.map(function(g) {return [g.name,g.email,g.bringing_someone?'Yes':'No',g.companion_name,g.companion_email,g.interested_in_speaking?'Yes':'No',g.registered_at,g.invited?'Yes':'No',companionCount(g)];}));
+  var rows = [['Name','Email','Who invited you','Bringing someone','Companion(s)','Companion email(s)','Speaker interest','Registered at (UTC)','Invited','Companion count']].concat(guests.map(function(g) {return [g.name,g.email,g.invited_by || '—',g.bringing_someone?'Yes':'No',g.companion_name,g.companion_email,g.interested_in_speaking?'Yes':'No',g.registered_at,g.invited?'Yes':'No',companionCount(g)];}));
   var blob = new Blob(['\uFEFF' + rows.map(function(row){return row.map(cell).join(',');}).join('\r\n')],{type:'text/csv;charset=utf-8'});
   var url = URL.createObjectURL(blob); var link = document.createElement('a'); link.href = url; link.download = 'elab-rsvps-'+new Date().toISOString().slice(0,10)+'.csv'; link.click(); setTimeout(function(){URL.revokeObjectURL(url);},1000);
  });

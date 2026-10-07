@@ -144,7 +144,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 }
 </style>
 <script src="./site-config.js" defer></script>
-<script src="./party.js" defer></script>
+<script src="./party.js?v=20261007-invited-by" defer></script>
 </head>
 <body>
 
@@ -198,6 +198,8 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
       <input id="guest-name" name="guestName" type="text" placeholder="Name" autocomplete="name" maxlength="100" required>
       <label class="field-label" for="email">Email</label>
       <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" inputmode="email" maxlength="254" required>
+      <label class="field-label" for="invited-by">Who invited you? (optional)</label>
+      <input id="invited-by" name="invitedBy" type="text" placeholder="Their name" autocomplete="off" maxlength="100">
       <fieldset class="bringing-choice">
         <legend>I'm bringing someone</legend>
         <div class="yn-options">
