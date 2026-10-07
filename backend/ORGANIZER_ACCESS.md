@@ -30,3 +30,21 @@ computer. CSV cells neutralize formula prefixes; the table uses textContent.
 Only the production GitHub Pages origin is accepted for browser requests. CORS
 is not the access control: every list request also requires a valid session.
 Do not change the private schema's exposure or add public read policies.
+
+## Invitation tracking
+
+The Invited checkbox records whether you have sent a guest their calendar invitation.
+It does not send invitations. Updates persist in Supabase and are included in CSV exports.
+To enable this column on an existing installation, rerun `backend/organizer-access.sql`
+(it preserves RSVPs and passwords), redeploy `organizer-rsvps`, and publish the updated
+`admin/` files. Existing guests start unchecked; mark those already invited manually.
+
+Each row also has Delete. A confirmation names the guest before permanently removing
+the RSVP and its email queue records. Google Calendar invitations are unaffected.
+Deletion requires a signed organizer session; anonymous API callers cannot delete.
+
+Actual headcount sums one person per RSVP plus the editable companion count.
+Initial counts split names on commas, semicolons, line breaks, ampersands or “and”;
+review these counts where names are ambiguous. Deleting an RSVP removes its entire
+headcount contribution. Rerun organizer-access.sql and redeploy the function for
+this update; existing saved companion counts are preserved.

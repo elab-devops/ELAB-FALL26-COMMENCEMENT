@@ -7,6 +7,8 @@ globalThis.fetch = async (url,options)=>{
  calls.push(url);
  assert.equal(options.headers.Authorization,'Bearer test-service-key');
  if(url.endsWith('/organizer_login_allowed')) return Response.json(rateAllowed);
+ if(url.endsWith('/organizer_set_invited')) { assert.deepEqual(JSON.parse(options.body),{guest_email:'guest@example.com',is_invited:true}); return Response.json(true); }
+ if(url.endsWith('/organizer_delete_rsvp')) { assert.deepEqual(JSON.parse(options.body),{guest_email:'guest@example.com'}); return Response.json(true); }
  if(url.endsWith('/organizer_rsvp_list')) return Response.json([{name:'Test guest'}]);
  throw Error('Unexpected request');
 };
@@ -21,6 +23,19 @@ test('organizer access validates password and signed expiring sessions',async()=
  assert.equal(login.status,200);
  const {token}=await login.json();
  assert.equal((await send({action:'list'},token)).status,200);
+ calls=[];
+ assert.equal((await send({action:'set_invited',email:'guest@example.com',invited:true})).status,401);
+ assert.equal(calls.length,0);
+ assert.equal((await send({action:'set_invited',email:'guest@example.com',invited:'yes'},token)).status,400);
+ assert.equal(calls.length,0);
+ assert.equal((await send({action:'set_invited',email:'guest@example.com',invited:true},token)).status,200);
+ assert.equal(calls.length,1);
+ calls=[];
+ assert.equal((await send({action:'delete',email:'guest@example.com',confirm:true})).status,401);
+ assert.equal((await send({action:'delete',email:'guest@example.com'},token)).status,400);
+ assert.equal(calls.length,0);
+ assert.equal((await send({action:'delete',email:'guest@example.com',confirm:true},token)).status,200);
+ assert.equal(calls.length,1);
  assert.equal((await send({action:'list'},token+'tampered')).status,401);
  const expired='1.'+token.split('.').slice(1).join('.');
  assert.equal((await send({action:'list'},expired)).status,401);

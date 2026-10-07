@@ -36,6 +36,21 @@ Deno.serve(async (request: Request) => {
   let valid = false;
   try { valid = await crypto.subtle.verify('HMAC',key,Uint8Array.from(atob(parts[2]),c=>c.charCodeAt(0)),encoder.encode(parts.slice(0,2).join('.'))); } catch { /* Invalid token */ }
   if (!valid) return response({error:'Please sign in again.'},401);
+  if (body.action === 'set_invited') {
+   if (typeof body.email !== 'string' || !body.email || body.email.length > 320 || typeof body.invited !== 'boolean') return response({error:'Invalid invitation update.'},400);
+   const updated = await rpc('organizer_set_invited',{guest_email:body.email,is_invited:body.invited});
+   return updated ? response({saved:true}) : response({error:'Guest not found.'},404);
+  }
+  if (body.action === 'delete') {
+   if (typeof body.email !== 'string' || !body.email || body.email.length > 320 || body.confirm !== true) return response({error:'Confirm the guest deletion.'},400);
+   const deleted = await rpc('organizer_delete_rsvp',{guest_email:body.email});
+   return deleted ? response({deleted:true}) : response({error:'Guest not found.'},404);
+  }
+  if (body.action === 'set_companion_count') {
+   if (typeof body.email !== 'string' || !body.email || body.email.length > 320 || !Number.isInteger(body.count) || body.count < 0 || body.count > 1000) return response({error:'Invalid companion count.'},400);
+   const updated = await rpc('organizer_set_companion_count',{guest_email:body.email,guest_count:body.count});
+   return updated ? response({saved:true}) : response({error:'Guest not found.'},404);
+  }
   if(body.action !== 'list') return response({error:'Unknown action'},400);
   return response({guests:await rpc('organizer_rsvp_list')});
  } catch { return response({error:'Unable to load organizer data. Please try again.'},503); }
