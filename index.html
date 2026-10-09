@@ -386,7 +386,7 @@ var PHOTOS=[
  if(!window.SC || !SC.Widget) return;
  var button=document.getElementById('record-toggle'), widget=SC.Widget('soundcloud-player');
  function state(playing){button.classList.toggle('playing',playing);button.setAttribute('aria-pressed',String(playing));button.setAttribute('aria-label',(playing?'Pause':'Play')+' donna luise by relux');}
- widget.bind(SC.Widget.Events.READY,function(){button.disabled=false;});
+ widget.bind(SC.Widget.Events.READY,function(){widget.seekTo(530000);button.disabled=false;});
  widget.bind(SC.Widget.Events.PLAY,function(){state(true);});
  widget.bind(SC.Widget.Events.PAUSE,function(){state(false);});
  widget.bind(SC.Widget.Events.FINISH,function(){state(false);});
