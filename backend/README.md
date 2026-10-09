@@ -43,7 +43,7 @@ to the registering guest only. Repeat submissions keep the original RSVP.
 
 ## Calendar invitations and event details
 
-Event times are defined in `site-config.js`. The evening ends at midnight
+Event times are defined in `site-config.js`. The evening ends at 23:00
 (00:00 on October 18) Munich time. The RSVP confirmation says “Your calendar
 invitation will follow.” The website and email do not offer independent calendar
 copies. The old event.ics file is retained for legacy imports but is no longer linked.

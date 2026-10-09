@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ELAB Commencement Party</title>
-<meta property="og:title" content="ELAB Commencement Party">
-<meta name="twitter:title" content="ELAB Commencement Party">
+<title>ELAB Commencement get together</title>
+<meta property="og:title" content="ELAB Commencement get together">
+<meta name="twitter:title" content="ELAB Commencement get together">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&display=swap" rel="stylesheet">
@@ -142,8 +142,20 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   .js .reveal{opacity:1;transform:none}
   .cue svg{opacity:1}
 }
+
+.music{display:flex;align-items:center;gap:1.5rem;margin-top:1rem;width:100%}
+.record-button{flex:0 0 94px;width:94px;height:94px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+.record-button:focus-visible{outline:1px solid #777;outline-offset:6px}
+.record{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle,#222 0 1px,#151515 2px 3px);box-shadow:0 2px 8px #0002;animation:record-spin 3s linear infinite;animation-play-state:paused}
+.record-button.playing .record{animation-play-state:running}
+.record-label{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#ddd;color:#222;font-size:8px;letter-spacing:1px;position:relative}
+.record-label:after{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#151515}
+.music-player{flex:1;min-width:0}.music-player iframe{display:block;width:100%;height:166px;border:0}.music-player a{font-size:.65rem;color:#777;text-underline-offset:3px}
+@media(prefers-reduced-motion:reduce){.record{animation:none}}
+@keyframes record-spin{to{transform:rotate(360deg)}}
+@media(max-width:450px){.music{gap:.8rem}.record-button{flex-basis:70px;width:70px;height:70px}}
 </style>
-<script src="./site-config.js" defer></script>
+<script src="./site-config.js?v=20261009" defer></script>
 <script src="./party.js?v=20261007-invited-by" defer></script>
 </head>
 <body>
@@ -163,7 +175,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
     <svg class="logo" viewBox="0 0 255 40" role="img" aria-label="TUM.ai ELAB FALL 2026">
       <text x="127.5" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-weight="300" font-size="16" letter-spacing="3" fill="#000">TUM.ai ELAB FALL 2026</text>
     </svg>
-    <p class="opening-party">OPENING PARTY</p>
+    <p class="opening-party">OPENING GET TOGETHER</p>
     <a class="opening-rsvp" href="#rsvp">RSVP for the guest list</a>
     <div class="cue" aria-hidden="true">
       <svg viewBox="0 0 16 8"><path d="M1 1l7 6 7-6"/></svg>
@@ -175,8 +187,12 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 <section class="invite">
   <h1 class="reveal" id="greeting">You’re invited.</h1>
   <div class="details">
-    <div class="reveal"><div class="label">When</div><p>Saturday, 17 October 2026, 19:00</p></div>
-    <div class="reveal"><div class="label">What</div><p>ELAB Commencement Party</p><p class="party-description">Just our people — no VCs, no partners. Drinks, DJ, and a good night.</p></div>
+    <div class="reveal"><div class="label">When</div><p>Saturday, 17 October 2026, 19:00–23:00</p></div>
+    <div class="reveal"><div class="label">What</div><p>ELAB Commencement get together</p><p class="party-description">Just our people — no VCs, no partners. A cold beer, DJ, and a good night. 3 stories from the circle.</p></div>
+    <div class="music reveal">
+      <button class="record-button" id="record-toggle" type="button" aria-label="Play donna luise by relux" aria-pressed="false" disabled><span class="record" aria-hidden="true"><span class="record-label">ELAB</span></span></button>
+      <div class="music-player"><iframe id="soundcloud-player" title="donna luise — 24.01.2026 by relux" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F2255973512&amp;auto_play=false&amp;color=%23222222&amp;show_artwork=false&amp;show_comments=false&amp;show_playcount=false&amp;buying=false&amp;sharing=false&amp;download=false"></iframe><a href="https://soundcloud.com/re_lux/donna-luise-24012026" target="_blank" rel="noopener noreferrer">donna luise · relux · SoundCloud</a></div>
+    </div>
     <div class="reveal"><div class="label">Where</div><p>TBA</p></div>
   </div>
   <p class="rsvp reveal"><a class="rsvp-down" href="#rsvp">RSVP</a></p>
@@ -362,6 +378,20 @@ var PHOTOS=[
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
   },{threshold:.15});
   items.forEach(function(el){io.observe(el)});
+})();
+</script>
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+(function(){
+ if(!window.SC || !SC.Widget) return;
+ var button=document.getElementById('record-toggle'), widget=SC.Widget('soundcloud-player');
+ function state(playing){button.classList.toggle('playing',playing);button.setAttribute('aria-pressed',String(playing));button.setAttribute('aria-label',(playing?'Pause':'Play')+' donna luise by relux');}
+ widget.bind(SC.Widget.Events.READY,function(){button.disabled=false;});
+ widget.bind(SC.Widget.Events.PLAY,function(){state(true);});
+ widget.bind(SC.Widget.Events.PAUSE,function(){state(false);});
+ widget.bind(SC.Widget.Events.FINISH,function(){state(false);});
+ widget.bind(SC.Widget.Events.ERROR,function(){state(false);button.disabled=true;});
+ button.addEventListener('click',function(){widget.toggle();});
 })();
 </script>
 </body>

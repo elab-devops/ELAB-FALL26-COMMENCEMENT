@@ -16,14 +16,14 @@ test('countdown targets 19:00 Munich time and stops at zero', () => {
 test('calendar links and downloaded file agree on the evening and local time', () => {
   const links = calendarLinks(event);
   const google = new URL(links.google);
-  assert.equal(google.searchParams.get('text'), 'ELAB Commencement Evening');
-  assert.equal(google.searchParams.get('dates'), '20261017T170000Z/20261017T220000Z');
+  assert.equal(google.searchParams.get('text'), 'ELAB Commencement get together');
+  assert.equal(google.searchParams.get('dates'), '20261017T170000Z/20261017T210000Z');
   assert.equal(google.searchParams.get('ctz'), 'Europe/Berlin');
   assert.ok(google.searchParams.get('details').includes('Location coming soon, see you there.'));
   const file = calendarFile(event);
   assert.equal(file, fs.readFileSync('event.ics', 'utf8'));
   assert.match(file, /DTSTART:20261017T170000Z\r\n/);
-  assert.match(file, /DTEND:20261017T220000Z\r\n/);
+  assert.match(file, /DTEND:20261017T210000Z\r\n/);
   assert.match(file, /TRANSP:OPAQUE/);
   for (const line of file.split('\r\n')) assert.ok(Buffer.byteLength(line) <= 75);
 });

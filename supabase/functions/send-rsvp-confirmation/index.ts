@@ -23,7 +23,7 @@ type OrganizerGuest = EmailGuest & {
   interested_in_speaking: boolean;
 };
 
-const EVENT = {"title":"ELAB Commencement Evening","start":"2026-10-17T19:00:00+02:00","end":"2026-10-18T00:00:00+02:00","location":"Munich — location coming soon","description":"Location coming soon, see you there.","url":"https://elab-devops.github.io/ELAB-FALL26-COMMENCEMENT/"};
+const EVENT = {"title":"ELAB Commencement get together","start":"2026-10-17T19:00:00+02:00","end":"2026-10-17T23:00:00+02:00","location":"Munich — location coming soon","description":"Location coming soon, see you there.","url":"https://elab-devops.github.io/ELAB-FALL26-COMMENCEMENT/"};
 function escapeHTML(value: unknown): string {
   const entities: Record<string, string> = {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
