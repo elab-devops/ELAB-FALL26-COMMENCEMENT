@@ -143,17 +143,18 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   .cue svg{opacity:1}
 }
 
-.music{display:flex;align-items:center;gap:1.5rem;margin-top:1rem;width:100%}
+.hero-music{display:flex;justify-content:center;margin-bottom:.8rem}
+.soundcloud-hidden{position:fixed;left:-10000px;top:0;width:1px;height:1px;border:0;pointer-events:none}
 .record-button{flex:0 0 94px;width:94px;height:94px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
 .record-button:focus-visible{outline:1px solid #777;outline-offset:6px}
 .record{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle,#222 0 1px,#151515 2px 3px);box-shadow:0 2px 8px #0002;animation:record-spin 3s linear infinite;animation-play-state:paused}
 .record-button.playing .record{animation-play-state:running}
 .record-label{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#ddd;color:#222;font-size:8px;letter-spacing:1px;position:relative}
 .record-label:after{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#151515}
-.music-player{flex:1;min-width:0}.music-player iframe{display:block;width:100%;height:166px;border:0}.music-player a{font-size:.65rem;color:#777;text-underline-offset:3px}
 @media(prefers-reduced-motion:reduce){.record{animation:none}}
 @keyframes record-spin{to{transform:rotate(360deg)}}
-@media(max-width:450px){.music{gap:.8rem}.record-button{flex-basis:70px;width:70px;height:70px}}
+@media(max-width:450px){.hero-music{display:flex;justify-content:center;margin-bottom:.8rem}
+.soundcloud-hidden{position:fixed;left:-10000px;top:0;width:1px;height:1px;border:0;pointer-events:none}
 </style>
 <script src="./site-config.js?v=20261009" defer></script>
 <script src="./party.js?v=20261007-invited-by" defer></script>
@@ -166,6 +167,10 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 
 <section class="open" aria-label="TUM.ai ELAB Fall 2026">
   <div class="logo-wrap">
+    <div class="hero-music">
+      <button class="record-button" id="record-toggle" type="button" aria-label="Play donna luise by relux" aria-pressed="false" disabled><span class="record" aria-hidden="true"><span class="record-label">ELAB</span></span></button>
+    </div>
+
     <div class="countdown" role="timer" aria-label="Time until 17 October 2026 at 19:00 Munich time">
       <div class="countdown-unit"><b data-countdown>--</b><span>d</span></div><span class="countdown-divider" aria-hidden="true">/</span>
       <div class="countdown-unit"><b data-countdown>--</b><span>h</span></div><span class="countdown-divider" aria-hidden="true">/</span>
@@ -189,10 +194,6 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
   <div class="details">
     <div class="reveal"><div class="label">When</div><p>Saturday, 17 October 2026, 19:00–23:00</p></div>
     <div class="reveal"><div class="label">What</div><p>ELAB Commencement get together</p><p class="party-description">Just our people — no VCs, no partners. A cold beer, DJ, and a good night. 3 stories from the circle.</p></div>
-    <div class="music reveal">
-      <button class="record-button" id="record-toggle" type="button" aria-label="Play donna luise by relux" aria-pressed="false" disabled><span class="record" aria-hidden="true"><span class="record-label">ELAB</span></span></button>
-      <div class="music-player"><iframe id="soundcloud-player" title="donna luise — 24.01.2026 by relux" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F2255973512&amp;auto_play=false&amp;color=%23222222&amp;show_artwork=false&amp;show_comments=false&amp;show_playcount=false&amp;buying=false&amp;sharing=false&amp;download=false"></iframe><a href="https://soundcloud.com/re_lux/donna-luise-24012026" target="_blank" rel="noopener noreferrer">donna luise · relux · SoundCloud</a></div>
-    </div>
     <div class="reveal"><div class="label">Where</div><p>TBA</p></div>
   </div>
   <p class="rsvp reveal"><a class="rsvp-down" href="#rsvp">RSVP</a></p>
@@ -380,13 +381,14 @@ var PHOTOS=[
   items.forEach(function(el){io.observe(el)});
 })();
 </script>
+<iframe id="soundcloud-player" class="soundcloud-hidden" title="donna luise — 24.01.2026 by relux" aria-hidden="true" tabindex="-1" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F2255973512&amp;auto_play=false&amp;color=%23222222&amp;show_artwork=false&amp;show_comments=false&amp;show_playcount=false&amp;buying=false&amp;sharing=false&amp;download=false"></iframe>
 <script src="https://w.soundcloud.com/player/api.js"></script>
 <script>
 (function(){
  if(!window.SC || !SC.Widget) return;
  var button=document.getElementById('record-toggle'), widget=SC.Widget('soundcloud-player');
  function state(playing){button.classList.toggle('playing',playing);button.setAttribute('aria-pressed',String(playing));button.setAttribute('aria-label',(playing?'Pause':'Play')+' donna luise by relux');}
- widget.bind(SC.Widget.Events.READY,function(){widget.seekTo(530000);button.disabled=false;});
+ widget.bind(SC.Widget.Events.READY,function(){widget.seekTo(530000);button.disabled=false;widget.play();});
  widget.bind(SC.Widget.Events.PLAY,function(){state(true);});
  widget.bind(SC.Widget.Events.PAUSE,function(){state(false);});
  widget.bind(SC.Widget.Events.FINISH,function(){state(false);});
