@@ -145,7 +145,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 
 .hero-music{display:flex;justify-content:center;margin-bottom:.8rem}
 .soundcloud-hidden{position:fixed;left:-10000px;top:0;width:1px;height:1px;border:0;pointer-events:none}
-.record-button{flex:0 0 94px;width:94px;height:94px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+.record-button{position:relative;flex:0 0 94px;width:94px;height:94px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
 .record-button:focus-visible{outline:1px solid #777;outline-offset:6px}
 .record{position:relative;overflow:hidden;display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle,#222 0 1px,#151515 2px 3px);box-shadow:0 2px 8px #0002;animation:record-spin 3s linear infinite;animation-play-state:paused}
 .record-button.playing .record{animation-play-state:running}
@@ -154,6 +154,13 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 @media(prefers-reduced-motion:reduce){.record{animation:none}}
 @keyframes record-spin{to{transform:rotate(360deg)}}
 @media(max-width:450px){.record-button{flex-basis:70px;width:70px;height:70px}.record-brand{background-size:30px 15px}}
+
+.record-control{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.record-control:before{content:'';position:absolute;width:30px;height:30px;border-radius:50%;background:rgba(15,15,15,.9);box-shadow:0 0 0 1px #ffffff30}
+.record-control svg{position:relative;width:15px;height:15px;color:#fff}
+.record-play{fill:currentColor}.record-pause{fill:none;stroke:currentColor;stroke-width:2}
+.record-control .record-pause{display:none}.record-button.playing .record-play{display:none}.record-button.playing .record-pause{display:block}
+.record-button:hover .record-control:before{background:#333}
 </style>
 <script src="./site-config.js?v=20261009" defer></script>
 <script src="./party.js?v=20261007-invited-by" defer></script>
@@ -167,7 +174,7 @@ h2{font-size:clamp(2.2rem,6.5vw,5rem)}
 <section class="open" aria-label="TUM.ai ELAB Fall 2026">
   <div class="logo-wrap">
     <div class="hero-music">
-      <button class="record-button" id="record-toggle" type="button" aria-label="Play donna luise by relux" aria-pressed="false" disabled><span class="record" aria-hidden="true"><span class="record-brand"></span><span class="record-spindle"></span></span></button>
+      <button class="record-button" id="record-toggle" type="button" aria-label="Play donna luise by relux" aria-pressed="false" disabled><span class="record" aria-hidden="true"><span class="record-brand"></span><span class="record-spindle"></span></span><span class="record-control" aria-hidden="true"><svg class="record-play" viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg><svg class="record-pause" viewBox="0 0 16 16"><path d="M5 3v10M11 3v10"/></svg></span></button>
     </div>
 
     <div class="countdown" role="timer" aria-label="Time until 17 October 2026 at 19:00 Munich time">
