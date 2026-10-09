@@ -260,16 +260,17 @@ var PHOTOS=[
 
   /* batch: real members first, then faint empty frames (teaser: nobody can count how many are accepted).
      Add a person by appending to REAL and their photo to PHOTOS. */
-  var REAL=[ /* first name, credentials */
-    ["Jan", "University of Oxford, UC Berkeley, Zeppelin University, Extantia Capital (€200M VC), Angel Investor (YC S25). Here to break the physical cap on human labor.", "https://www.linkedin.com/in/jan-olsson/"],
-    ["Laura", "ETH Zürich & École Polytechnique robotics engineer. Former BMW driver-assistance engineer & World Championship athlete. Bringing zero-downtime teleop to factory floors.", "https://www.linkedin.com/in/laura-roduner/"],
-    ["Lukas", "TUM, Fraunhofer, IEEE T-NNLS, ICVS — 10x’d Physical Intelligence’s SOTA algorithms. Fighting for every millisecond on the factory floor. Let’s make Europe manufacture again.", "https://www.linkedin.com/in/lukas-knak/"],
-    ["Stephan", "TUM, enterprise data architect ignoring the ‘SaaS is dead’ noise. Pitching multi-billion-euro enterprises. Here to build a decacorn.", "https://www.linkedin.com/in/stephanschnitzer/"],
-    ["Vladyslav", "University of Freiburg, Prior Labs, TabPFN-3, NeurIPS 2026, ELLIS PhD Fellow. Built AI that predicts what happens next. Now building AI that knows what happens if you act.", "https://www.linkedin.com/in/vladyslav-moroshan/"],
-    ["Greta", "University of Oxford, raised 60k to afford it, Oxford Seed Fund, President of Oxford Founders Society. Building an AI customs broker. Here to make Europe’s supply chains traceable.", "https://www.linkedin.com/in/greta-sikora/"],
-    ["Thomas", "Imperial College London, Microsoft, EWOR Fellow, FR8 cohort 2. Won Imperial’s environmental impact startup prize. Now building in stealth. Europe doesn’t need another strategy deck. Europe needs to build.", "https://www.linkedin.com/in/thomasumgrant/"]
+  var REAL=[ /* initial, credentials, optional profile link */
+    ["J.", "University of Oxford, UC Berkeley, Zeppelin University, Extantia Capital (€200M VC), Angel Investor (YC S25). Here to break the physical cap on human labor.", "https://www.linkedin.com/in/jan-olsson/"],
+    ["L.", "ETH Zürich & École Polytechnique robotics engineer. Former BMW driver-assistance engineer & World Championship athlete. Bringing zero-downtime teleop to factory floors.", "https://www.linkedin.com/in/laura-roduner/"],
+    ["L.", "TUM, Fraunhofer, IEEE T-NNLS, ICVS — 10x’d Physical Intelligence’s SOTA algorithms. Fighting for every millisecond on the factory floor. Let’s make Europe manufacture again.", "https://www.linkedin.com/in/lukas-knak/"],
+    ["S.", "TUM, enterprise data architect ignoring the ‘SaaS is dead’ noise. Pitching multi-billion-euro enterprises. Here to build a decacorn.", "https://www.linkedin.com/in/stephanschnitzer/"],
+    ["V.", "University of Freiburg, Prior Labs, TabPFN-3, NeurIPS 2026, ELLIS PhD Fellow. Built AI that predicts what happens next. Now building AI that knows what happens if you act.", "https://www.linkedin.com/in/vladyslav-moroshan/"],
+    ["G.", "University of Oxford, raised 60k to afford it, Oxford Seed Fund, President of Oxford Founders Society. Building an AI customs broker. Here to make Europe’s supply chains traceable.", "https://www.linkedin.com/in/greta-sikora/"],
+    ["T.", "Imperial College London, Microsoft, EWOR Fellow, FR8 cohort 2. Won Imperial’s environmental impact startup prize. Now building in stealth. Europe doesn’t need another strategy deck. Europe needs to build.", "https://www.linkedin.com/in/thomasumgrant/"],
+    ["A.", "TUM, CARIAD (Volkswagen), 9+ years in AI performance. Turning hand-drawn floor plans into walkable 3D homes. Making real estate real before it's built."]
   ];
-  var FADE_FROM=6;           /* index where the fade-out starts (Thomas); null = no fade, no ghosts */
+  var FADE_FROM=7;           /* index where the fade-out starts (Ahmed); null = no fade, no ghosts */
   var GHOSTS=4;              /* faint empty frames after the last real member */
   var FADE=[.75,.36,.18,.07,.02];
   var batch=REAL.concat(Array.from({length:FADE_FROM===null?0:GHOSTS},function(){return null}));
